@@ -7,6 +7,7 @@ package Planificador;
 /**
  *
  * @author Diego
+ * Shortest Remaining Time
  */
 public class SRT {
     

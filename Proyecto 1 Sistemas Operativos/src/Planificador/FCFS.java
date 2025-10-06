@@ -7,6 +7,7 @@ package Planificador;
 /**
  *
  * @author Diego
+ * First-Come, First-Served
  */
 public class FCFS {
     

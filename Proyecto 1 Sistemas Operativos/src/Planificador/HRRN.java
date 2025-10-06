@@ -7,6 +7,7 @@ package Planificador;
 /**
  *
  * @author Diego
+ * Highest Response Ratio Next
  */
 public class HRRN {
     

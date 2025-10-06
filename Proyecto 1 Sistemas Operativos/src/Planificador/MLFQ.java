@@ -7,6 +7,7 @@ package Planificador;
 /**
  *
  * @author Diego
+ * Multilevel Feedback Queue
  */
 public class MLFQ {
     

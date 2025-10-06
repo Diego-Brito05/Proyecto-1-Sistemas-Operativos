@@ -7,6 +7,7 @@ package Planificador;
 /**
  *
  * @author Diego
+ * Shortest Process Next
  */
 public class SPN {
     
