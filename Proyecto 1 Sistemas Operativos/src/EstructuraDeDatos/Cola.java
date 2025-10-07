@@ -12,6 +12,7 @@ public class Cola<T> {
     private Nodo<T> frente;
     private Nodo<T> finalCola;
     private int tamano;
+    private final Object bloqueoCola = new Object(); // Objeto para sincronizar accesos a esta cola
 
     public Cola() {
         this.frente = null;
@@ -20,68 +21,82 @@ public class Cola<T> {
     }
 
     public void encolar(T elemento) {
-        Nodo<T> nuevoNodo = new Nodo<>(elemento);
-        if (estaVacia()) {
-            frente = nuevoNodo;
-            finalCola = nuevoNodo;
-        } else {
-            finalCola.setSiguiente(nuevoNodo);
-            finalCola = nuevoNodo;
+        synchronized (bloqueoCola) { // Protege el acceso a la cola
+            Nodo<T> nuevoNodo = new Nodo<>(elemento);
+            if (estaVacia()) { // estaVacia() también debe ser sincronizado si se llama desde aquí
+                frente = nuevoNodo;
+                finalCola = nuevoNodo;
+            } else {
+                finalCola.setSiguiente(nuevoNodo);
+                finalCola = nuevoNodo;
+            }
+            tamano++;
+            // Podrías notificar a hilos que esperan por elementos si esta cola fuera de tipo productor/consumidor
+            // bloqueoCola.notifyAll();
         }
-        tamano++;
     }
 
     public T desencolar() {
-        if (estaVacia()) {
-            return null;
+        synchronized (bloqueoCola) { // Protege el acceso a la cola
+            if (estaVacia()) {
+                return null;
+            }
+            T dato = frente.getDato();
+            frente = frente.getSiguiente();
+            if (frente == null) {
+                finalCola = null;
+            }
+            tamano--;
+            return dato;
         }
-        T dato = frente.getDato();
-        frente = frente.getSiguiente();
-        if (frente == null) { // La cola se vació
-            finalCola = null;
-        }
-        tamano--;
-        return dato;
     }
 
     public T verFrente() {
-        if (estaVacia()) {
-            return null;
+        synchronized (bloqueoCola) {
+            if (estaVacia()) {
+                return null;
+            }
+            return frente.getDato();
         }
-        return frente.getDato();
     }
 
     public boolean estaVacia() {
-        return frente == null;
+        synchronized (bloqueoCola) { // Es importante sincronizar este método también
+            return frente == null;
+        }
     }
 
     public int getTamano() {
-        return tamano;
+        synchronized (bloqueoCola) { // También sincronizar
+            return tamano;
+        }
     }
 
-    // Método para obtener todos los elementos de la cola como un array (útil para visualización)
+    // toArray también debe ser sincronizado para obtener una "snapshot" consistente
     public T[] toArray(T[] a) {
-        if (tamano == 0) {
-            return (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), 0);
-        }
-
-        if (a.length < tamano) {
-            a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), tamano);
-        }
-
-        int i = 0;
-        Nodo<T> actual = frente;
-        while (actual != null) {
-            a[i++] = actual.getDato();
-            actual = actual.getSiguiente();
-        }
-
-        // Si el array proporcionado era más grande, establece el resto a null
-        if (a.length > tamano) {
-            for (int j = tamano; j < a.length; j++) {
-                a[j] = null;
+        synchronized (bloqueoCola) {
+            // ... (implementación de toArray) ...
+            if (tamano == 0) {
+                return (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), 0);
             }
+
+            if (a.length < tamano) {
+                a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), tamano);
+            }
+
+            int i = 0;
+            Nodo<T> actual = frente;
+            while (actual != null) {
+                a[i++] = actual.getDato();
+                actual = actual.getSiguiente();
+            }
+
+            if (a.length > tamano) {
+                for (int j = tamano; j < a.length; j++) {
+                    a[j] = null;
+                }
+            }
+            return a;
         }
-        return a;
     }
 }
