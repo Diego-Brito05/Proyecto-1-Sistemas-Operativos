@@ -4,164 +4,174 @@
  */
 package EstructuraDeDatos;
 
-/**
- *
- * @author Diego
- */
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger; // Para generar IDs únicos de forma segura
 
-public class Proceso implements Runnable {
-    public enum EstadoProceso {
-        NUEVO, LISTO, EJECUCION, BLOQUEADO, TERMINADO, SUSPENDIDO_LISTO, SUSPENDIDO_BLOQUEADO
-    }
+public class Proceso implements Comparable<Proceso> { // Implementa Comparable para facilitar el ordenamiento en colas
+    private static final AtomicInteger nextId = new AtomicInteger(0); // Generador de IDs único para todos los procesos
 
-    private static int nextProcessId = 0; 
-    private int id;
+    private final int id;
     private String nombre;
-    private EstadoProceso estado;
-    private int programCounter; // Cuántas instrucciones se han ejecutado 
-    private int mar; // Memory Address Register 
-    private int totalInstrucciones; 
-    private TipoProceso tipoProceso; // CPU_BOUND o IO_BOUND
+    private EstadoProceso estado; // Enum para los estados del proceso
+    private int programCounter; // Dirección de la siguiente instrucción a ejecutar
+    private int memoryAddressRegister; // Dirección de memoria actual (para simular el acceso a datos)
+    private int totalInstrucciones; // Longitud total del programa
+    private int instruccionesEjecutadas; // Cuántas instrucciones se han ejecutado hasta ahora
+    private TipoProceso tipoProceso; // CPU-bound o I/O-bound
+    private int ciclosParaExcepcion; // Para I/O-bound: cuántos ciclos se necesitan para generar una excepción
+    private int ciclosExcepcionCompletada; // Para I/O-bound: cuántos ciclos para satisfacer la excepción
+    private int ciclosEsperaIO; // Contador interno para la espera de I/O
+    private int prioridad; // Usado para algunos algoritmos de planificación (ej. HRRN, MLFQ)
+    private int quantumRestante; // Usado en Round Robin
 
-    // Para procesos I/O bound
-    private int ciclosParaExcepcion; // Cuántas "instrucciones" CPU antes de una solicitud de E/S
-    private int ciclosParaSatisfacerExcepcion; // Cuántos ciclos se necesitan para completar la E/S
-    private int ciclosDesdeUltimaExcepcion; 
-    private int ciclosRestantesIO; // Contador para la satisfacción de la E/S actual (cuando está bloqueado)
+   // --- CONSTRUCTORES ---
 
-    // Métricas para el rendimiento del proceso
-    private long tiempoLlegada; // Tiempo en que el proceso llega al sistema (en ms o ciclos simulados)
-    private long tiempoCompletado; // Tiempo en que el proceso termina
-    private long tiempoEnCPU; // Tiempo total que el proceso ha estado en CPU
-    private long tiempoEsperando; // Tiempo total que el proceso ha estado en colas de listo
-    private long tiempoBloqueado; // Tiempo total que el proceso ha estado en colas de bloqueado
-    private long tiempoRespuesta; // Tiempo desde llegada hasta primera vez en CPU
-    private boolean primeraVezEnCPU; // Flag para calcular tiempoRespuesta
-
-    // Semaforo para controlar la ejecución del hilo del proceso por parte del Scheduler
-    private final Semaphore semaforoEjecucion; // Permiso para ejecutar (0 = pausado, 1 = reanudado)
-
-    public enum TipoProceso {
-        CPU_BOUND, IO_BOUND
-    }
-
-    public Proceso(String nombre, int totalInstrucciones, TipoProceso tipo, int ciclosExcepcion, int ciclosSatisfacer) {
-        this.id = nextProcessId++;
+    // Constructor completo con prioridad
+    public Proceso(String nombre, int totalInstrucciones, TipoProceso tipoProceso,
+                   int ciclosParaExcepcion, int ciclosExcepcionCompletada, int prioridad) { 
+        this.id = nextId.getAndIncrement();
         this.nombre = nombre;
         this.estado = EstadoProceso.NUEVO;
         this.programCounter = 0;
-        this.mar = 0; // MAR se actualizará junto con PC
+        this.memoryAddressRegister = 0;
         this.totalInstrucciones = totalInstrucciones;
-        this.tipoProceso = tipo;
-
-        // Inicialización para I/O bound
-        this.ciclosParaExcepcion = ciclosExcepcion;
-        this.ciclosParaSatisfacerExcepcion = ciclosSatisfacer;
-        this.ciclosDesdeUltimaExcepcion = 0; // Inicia en 0, se incrementa con cada instrucción CPU
-        this.ciclosRestantesIO = ciclosSatisfacer; // Se usará cuando el proceso esté BLOQUEADO
-
-        // Inicialización de métricas
-        this.tiempoLlegada = 0;
-        this.tiempoCompletado = 0;
-        this.tiempoEnCPU = 0;
-        this.tiempoEsperando = 0;
-        this.tiempoBloqueado = 0;
-        this.tiempoRespuesta = -1;
-        this.primeraVezEnCPU = true;
-
-        // El semáforo inicia en 0 (adquirido), para que el hilo esté "pausado" hasta que el Scheduler lo libere.
-        this.semaforoEjecucion = new Semaphore(0);
+        this.instruccionesEjecutadas = 0;
+        this.tipoProceso = tipoProceso;
+        this.ciclosParaExcepcion = ciclosParaExcepcion;
+        this.ciclosExcepcionCompletada = ciclosExcepcionCompletada;
+        this.ciclosEsperaIO = 0;
+        this.prioridad = prioridad; // si no se especifica sera igual a 0
+        this.quantumRestante = 0;
     }
 
-    // --- Métodos de Getters y Setters ---
+    // Constructor para procesos I/O-bound sin especificar prioridad (prioridad por defecto 0)
+    public Proceso(String nombre, int totalInstrucciones, TipoProceso tipoProceso,
+                   int ciclosParaExcepcion, int ciclosExcepcionCompletada) {
+        this(nombre, totalInstrucciones, tipoProceso, ciclosParaExcepcion, ciclosExcepcionCompletada, 0); // Llama al constructor completo con prioridad 0
+    }
+
+    // Constructor para CPU-bound con prioridad
+    public Proceso(String nombre, int totalInstrucciones, TipoProceso tipoProceso, int prioridad) { 
+        this(nombre, totalInstrucciones, tipoProceso, -1, -1, prioridad); // Llama al constructor completo
+        if (tipoProceso == TipoProceso.IO_BOUND) {
+            throw new IllegalArgumentException("Un proceso I/O-bound debe especificar ciclos para excepción y completado.");
+        }
+    }
+
+    // Constructor para CPU-bound sin especificar prioridad (prioridad por defecto 0)
+    public Proceso(String nombre, int totalInstrucciones, TipoProceso tipoProceso) {
+        this(nombre, totalInstrucciones, tipoProceso, 0); // Llama al constructor de CPU-bound con prioridad 0
+    }
+
+
+    // --- Métodos de gestión de proceso ---
+
+    /**
+     * Simula la ejecución de una instrucción para este proceso.
+     * Incrementa el contador de programa, el registro de dirección de memoria
+     * y el contador de instrucciones ejecutadas.
+     */
+    public void ejecutarInstruccion() {
+        if (instruccionesEjecutadas < totalInstrucciones) {
+            instruccionesEjecutadas++;
+            programCounter++;
+            memoryAddressRegister++; // Suponiendo incremento lineal del MAR por simplicidad
+        }
+    }
+
+    /**
+     * Verifica si el proceso ha completado todas sus instrucciones.
+     * @return true si el proceso ha terminado, false en caso contrario.
+     */
+    public boolean haTerminado() {
+        return instruccionesEjecutadas >= totalInstrucciones;
+    }
+
+    /**
+     * Verifica si el proceso es I/O-bound.
+     * @return true si es I/O-bound, false si es CPU-bound.
+     */
+    public boolean esIOBound() {
+        return this.tipoProceso == TipoProceso.IO_BOUND;
+    }
+
+    /**
+     * Determina si el proceso I/O-bound necesita generar una excepción de E/S
+     * en el ciclo actual.
+     * @return true si debe generar una excepción de E/S, false en caso contrario.
+     */
+    public boolean necesitaExcepcionIO() {
+        // Solo aplica si es I/O-bound y se han definido ciclos para excepción
+        return esIOBound() && ciclosParaExcepcion != -1 &&
+               // Se activa cuando el número de instrucciones ejecutadas es un múltiplo de ciclosParaExcepcion
+               // y no es la instrucción 0 (para evitar una excepción al inicio)
+               (instruccionesEjecutadas > 0 && instruccionesEjecutadas % ciclosParaExcepcion == 0);
+    }
+
+    /**
+     * Decrementa el contador de ciclos de espera de E/S.
+     */
+    public void decrementarCicloEsperaIO() {
+        if (ciclosEsperaIO > 0) {
+            ciclosEsperaIO--;
+        }
+    }
+
+    // --- Getters y Setters ---
+
     public int getId() { return id; }
     public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
     public EstadoProceso getEstado() { return estado; }
     public void setEstado(EstadoProceso estado) { this.estado = estado; }
-    public int getProgramCounter() { return programCounter; } // Instrucciones ejecutadas
-    public void incrementarProgramCounter() { this.programCounter++; }
-    public int getMar() { return mar; }
-    public void incrementarMar() { this.mar++; } // Para este proyecto, MAR sigue a PC
-
+    public int getProgramCounter() { return programCounter; }
+    public void setProgramCounter(int programCounter) { this.programCounter = programCounter; }
+    public int getMemoryAddressRegister() { return memoryAddressRegister; }
+    public void setMemoryAddressRegister(int memoryAddressRegister) { this.memoryAddressRegister = memoryAddressRegister; }
     public int getTotalInstrucciones() { return totalInstrucciones; }
+    public int getInstruccionesEjecutadas() { return instruccionesEjecutadas; }
     public TipoProceso getTipoProceso() { return tipoProceso; }
-
-    // Métodos para I/O bound
     public int getCiclosParaExcepcion() { return ciclosParaExcepcion; }
-    public int getCiclosParaSatisfacerExcepcion() { return ciclosParaSatisfacerExcepcion; }
-    public int getCiclosDesdeUltimaExcepcion() { return ciclosDesdeUltimaExcepcion; }
-    public void incrementarCiclosDesdeUltimaExcepcion() { this.ciclosDesdeUltimaExcepcion++; }
-    public void resetCiclosDesdeUltimaExcepcion() { this.ciclosDesdeUltimaExcepcion = 0; } // Resetea al solicitar I/O
+    public int getCiclosExcepcionCompletada() { return ciclosExcepcionCompletada; }
+    public int getCiclosEsperaIO() { return ciclosEsperaIO; }
+    public void setCiclosEsperaIO(int ciclosEsperaIO) { this.ciclosEsperaIO = ciclosEsperaIO; }
+    public int getPrioridad() { return prioridad; }
+    public void setPrioridad(int prioridad) { this.prioridad = prioridad; }
+    public int getQuantumRestante() { return quantumRestante; }
+    public void setQuantumRestante(int quantumRestante) { this.quantumRestante = quantumRestante; }
 
-    public int getCiclosRestantesIO() { return ciclosRestantesIO; }
-    public void decrementarCiclosRestantesIO() { this.ciclosRestantesIO--; }
-    public void resetCiclosRestantesIO() { this.ciclosRestantesIO = ciclosParaSatisfacerExcepcion; } // Resetea al iniciar I/O
 
-    public boolean haTerminado() { return programCounter >= totalInstrucciones; }
-    public int getInstruccionesRestantes() { return totalInstrucciones - programCounter; }
-
-    // Getters y Setters para las métricas
-    public long getTiempoLlegada() { return tiempoLlegada; }
-    public void setTiempoLlegada(long tiempoLlegada) { this.tiempoLlegada = tiempoLlegada; }
-    public long getTiempoCompletado() { return tiempoCompletado; }
-    public void setTiempoCompletado(long tiempoCompletado) { this.tiempoCompletado = tiempoCompletado; }
-    public long getTiempoEnCPU() { return tiempoEnCPU; }
-    public void addTiempoEnCPU(long tiempo) { this.tiempoEnCPU += tiempo; }
-    public long getTiempoEsperando() { return tiempoEsperando; }
-    public void addTiempoEsperando(long tiempo) { this.tiempoEsperando += tiempo; }
-    public long getTiempoBloqueado() { return tiempoBloqueado; }
-    public void addTiempoBloqueado(long tiempo) { this.tiempoBloqueado += tiempo; }
-    public long getTiempoRespuesta() { return tiempoRespuesta; }
-    public void setTiempoRespuesta(long tiempoRespuesta) { this.tiempoRespuesta = tiempoRespuesta; }
-    public boolean isPrimeraVezEnCPU() { return primeraVezEnCPU; }
-    public void setPrimeraVezEnCPU(boolean primeraVezEnCPU) { this.primeraVezEnCPU = primeraVezEnCPU; }
-
-    // --- Métodos de sincronización con el Scheduler ---
-    public void pausarEjecucion() {
-        // Si el semáforo tiene permisos, los toma para "pausar" el proceso.
-        // Si ya está en 0, no hace nada, el hilo ya está esperando.
-        if (semaforoEjecucion.availablePermits() > 0) {
-            semaforoEjecucion.acquireUninterruptibly(); // Toma el permiso, no se interrumpe
-        }
-    }
-
-    public void reanudarEjecucion() {
-        // Libera un permiso para que el hilo pueda continuar (si está esperando)
-        if (semaforoEjecucion.availablePermits() == 0) {
-            semaforoEjecucion.release();
-        }
+    // Implementación de Comparable para ordenamiento por ID por defecto (o según necesites en un planificador)
+    @Override
+    public int compareTo(Proceso otro) {
+        return Integer.compare(this.id, otro.id);
     }
 
     @Override
     public String toString() {
-        return "Proceso [ID: " + id + ", Nombre: " + nombre + ", Estado: " + estado +
-               ", PC: " + programCounter + "/" + totalInstrucciones +
-               ", Tipo: " + tipoProceso + "]";
+        return "Proceso{" +
+               "id=" + id +
+               ", nombre='" + nombre + '\'' +
+               ", estado=" + estado +
+               ", PC=" + programCounter +
+               ", MAR=" + memoryAddressRegister +
+               ", instrucEjec=" + instruccionesEjecutadas + "/" + totalInstrucciones +
+               ", tipo=" + tipoProceso +
+               '}';
     }
 
-    // run method for Threads - A proceso *is* a Thread
-    @Override
-    public void run() {
-        // Este bucle representa la vida del proceso como un hilo.
-        // El hilo de cada proceso *espera* hasta que el Scheduler le dé permiso para "ejecutar" un ciclo.
-        while (estado != EstadoProceso.TERMINADO) {
-            try {
-                // El proceso "espera" por un permiso del semáforo.
-                // El Scheduler llamará a reanudarEjecucion() para darle el permiso.
-                semaforoEjecucion.acquire(); // Bloquea hasta que el Scheduler le dé un permiso
-                
-                
-                // la lógica de *ejecución real* (incrementar PC, etc.)
-                // NO ocurre aquí. Ocurre en el hilo principal del Scheduler/SistemaOperativo.
-               
-                
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                System.out.println("Proceso " + nombre + " interrumpido mientras esperaba permiso de ejecución.");
-                return; // Salir del bucle si es interrumpido
-            }
-        }
-        System.out.println("Proceso " + nombre + " ha terminado su ejecución simulada.");
+    // --- Enums auxiliares ---
+
+    /**
+     * Define los posibles estados de un proceso en el simulador.
+     */
+    public enum EstadoProceso {
+        NUEVO, LISTO, EJECUCION, BLOQUEADO, TERMINADO, SUSPENDIDO_LISTO, SUSPENDIDO_BLOQUEADO
+    }
+
+    /**
+     * Define el tipo de consumo de recursos principal de un proceso.
+     */
+    public enum TipoProceso {
+        CPU_BOUND, IO_BOUND
     }
 }
