@@ -51,12 +51,15 @@ public class Proceso implements Comparable<Proceso> {
 
     // --- CONSTRUCTORES  ---
     public Proceso(String nombre, int totalInstrucciones, TipoProceso tipoProceso,
-                   int ciclosParaExcepcion, int ciclosExcepcionCompletada, int prioridad) {
+        int ciclosParaExcepcion, int ciclosExcepcionCompletada, int prioridad, int direccionInicio) { 
         this.id = nextId.getAndIncrement();
         this.nombre = nombre;
         this.estado = EstadoProceso.NUEVO;
-        this.programCounter = 0;
-        this.memoryAddressRegister = 0;
+
+        // --- ESTE ES EL CAMBIO CLAVE ---
+        this.programCounter = direccionInicio;
+        this.memoryAddressRegister = direccionInicio; // El MAR inicial apunta al inicio del proceso
+
         this.totalInstrucciones = totalInstrucciones;
         this.instruccionesEjecutadas = 0;
         this.tipoProceso = tipoProceso;
@@ -75,17 +78,19 @@ public class Proceso implements Comparable<Proceso> {
 
     // Los otros constructores llaman al principal, por lo que se inicializan automáticamente.
     // ... (constructores existentes sin cambios) ...
-    public Proceso(String nombre, int totalInstrucciones, TipoProceso tipoProceso, int ciclosParaExcepcion, int ciclosExcepcionCompletada) {
-        this(nombre, totalInstrucciones, tipoProceso, ciclosParaExcepcion, ciclosExcepcionCompletada, 0);
+    // Constructor para procesos I/O-bound (actualizado para llamar al principal)
+    public Proceso(String nombre, int totalInstrucciones, TipoProceso tipoProceso,
+        int ciclosParaExcepcion, int ciclosExcepcionCompletada) {
+        // Llama al constructor completo con prioridad 0 y dirección de inicio 0 por defecto
+        this(nombre, totalInstrucciones, tipoProceso, ciclosParaExcepcion, ciclosExcepcionCompletada, 0, 0); 
     }
-    public Proceso(String nombre, int totalInstrucciones, TipoProceso tipoProceso, int prioridad) { 
-        this(nombre, totalInstrucciones, tipoProceso, -1, -1, prioridad);
-        if (tipoProceso == TipoProceso.IO_BOUND) {
-            throw new IllegalArgumentException("Un proceso I/O-bound debe especificar ciclos para excepción y completado.");
-        }
-    }
+
+    // Constructor para CPU-bound (actualizado para llamar al principal)
     public Proceso(String nombre, int totalInstrucciones, TipoProceso tipoProceso) {
-        this(nombre, totalInstrucciones, tipoProceso, 0);
+        this(nombre, totalInstrucciones, tipoProceso, -1, -1, 0, 0);
+        if (tipoProceso == TipoProceso.IO_BOUND) {
+        throw new IllegalArgumentException("Constructor incorrecto para I/O-bound.");
+        }
     }
 
 

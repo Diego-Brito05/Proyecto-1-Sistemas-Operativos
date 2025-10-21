@@ -27,6 +27,9 @@ public class Simulador implements Runnable {
     private Clock clock;
     private EstrategiaPlanificacion planificador;
     private Proceso procesoEnCPU;
+    
+    // VARIABLE PARA GESTIÓN DE MEMORIA SIMULADA
+    private int proximaDireccionMemoria = 1024;
 
     // --- Colas de Procesos ---
     private final Cola<Proceso> colaNuevos;
@@ -38,7 +41,7 @@ public class Simulador implements Runnable {
 
     // --- Estado de la Simulación ---
     private volatile boolean enEjecucion = false;
-    private final Thread hiloSimulacion;
+    private Thread hiloSimulacion; 
     
     // --- Parámetros Configurables ---
     private int quantum = 8; // Quantum para Round Robin y nivel superior de MLFQ
@@ -55,16 +58,23 @@ public class Simulador implements Runnable {
         this.colaTerminados = new Cola<>();
 
         this.procesoEnCPU = null;
-        this.hiloSimulacion = new Thread(this);
+        this.hiloSimulacion = null; 
     }
 
     // --- Control de la Simulación ---
-    public synchronized void iniciar() {
-        if (!enEjecucion) {
-            this.enEjecucion = true;
-            this.hiloSimulacion.start();
+   public synchronized void iniciar() {
+    // Solo inicia si no se está ejecutando
+    if (!enEjecucion) {
+        this.enEjecucion = true;
+        
+        // Si el hilo es nulo o está muerto, crea uno nuevo.
+        if (hiloSimulacion == null || !hiloSimulacion.isAlive()) {
+            // Creamos una nueva instancia del hilo CADA VEZ que iniciamos desde cero.
+            hiloSimulacion = new Thread(this);
+            hiloSimulacion.start(); // Iniciamos el nuevo hilo
         }
     }
+}
 
     public synchronized void detener() {
         this.enEjecucion = false;
@@ -287,6 +297,36 @@ public class Simulador implements Runnable {
         for (Object obj : procesosListos) {
             ((Proceso) obj).incrementarTiempoEspera();
         }
+    }
+    
+    
+    // MÉTODO DE CREACIÓN DE PROCESO CENTRALIZADA ---
+    /**
+     * Este método es llamado por la GUI para solicitar la creación de un nuevo proceso.
+     * El Simulador (OS) asigna la memoria y crea el objeto Proceso.
+     * @param nombre El nombre del proceso.
+     * @param totalInstrucciones La cantidad de instrucciones.
+     * @param tipo El tipo de proceso (CPU o I/O Bound).
+     * @param ciclosGenerar Ciclos para generar E/S (si aplica).
+     * @param ciclosSatisfacer Ciclos para completar E/S (si aplica).
+     */
+    public void solicitarCreacionProceso(String nombre, int totalInstrucciones, Proceso.TipoProceso tipo, int ciclosGenerar, int ciclosSatisfacer) {
+        //Asignar la dirección de memoria actual
+        int direccionInicio = this.proximaDireccionMemoria;
+
+        //Crear la instancia del Proceso con su dirección de inicio única
+        Proceso nuevoProceso;
+        if (tipo == Proceso.TipoProceso.IO_BOUND) {
+            nuevoProceso = new Proceso(nombre, totalInstrucciones, tipo, ciclosGenerar, ciclosSatisfacer, 0, direccionInicio);
+        } else { // CPU_BOUND
+            nuevoProceso = new Proceso(nombre, totalInstrucciones, tipo, -1, -1, 0, direccionInicio);
+        }
+        
+        
+        // Le sumamos un pequeño espacio extra (16).
+        this.proximaDireccionMemoria += totalInstrucciones + 16;
+
+        this.agregarNuevoProceso(nuevoProceso);
     }
 
     // --- Helpers ---

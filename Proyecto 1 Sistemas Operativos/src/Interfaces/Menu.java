@@ -36,6 +36,17 @@ import javax.swing.JOptionPane;
         miSimulador = new Simulador();
         configurarEstadoInicial();
         
+        
+         ProcesoListRenderer renderer = new ProcesoListRenderer();
+
+        ListaNuevo.setCellRenderer(renderer);
+        ListaListo.setCellRenderer(renderer);
+        ListaBloqueado.setCellRenderer(renderer);
+        ListaFinalizado.setCellRenderer(renderer);
+        ListaSuspListo.setCellRenderer(renderer);
+        ListaSuspBloqueado.setCellRenderer(renderer);
+        
+        
         actualizarDisplayDuracionCiclo();
         // Timer para que actualice la GUI cada 250ms (4 veces por segundo)
         guiUpdateTimer = new javax.swing.Timer(250, new java.awt.event.ActionListener() {
@@ -76,22 +87,16 @@ import javax.swing.JOptionPane;
     }
     
     
-    private void actualizarListaProcesos(javax.swing.JList<String> listaComponente, Object[] procesos) {
-    javax.swing.DefaultListModel<String> modelo = new javax.swing.DefaultListModel<>();
-    
-        for (Object obj : procesos) {
-            Proceso p = (Proceso) obj;
+    private void actualizarListaProcesos(javax.swing.JList<Proceso> listaComponente, Object[] procesosArray) {
+        // Creamos un DefaultListModel que contendrá objetos Proceso
+        javax.swing.DefaultListModel<Proceso> modelo = new javax.swing.DefaultListModel<>();
 
-            String tipo = p.esIOBound() ? "I/O bound" : "CPU bound";
-
-            String infoProceso = String.format("ID:%-3d | PC:%-4d | MAR:%-4d | %s", 
-                                                p.getId(), 
-                                                p.getProgramCounter(), 
-                                                p.getMemoryAddressRegister(), 
-                                                tipo);
-            modelo.addElement(infoProceso);
+        // Llenamos el modelo con los objetos Proceso del array.
+        for (Object obj : procesosArray) {
+            modelo.addElement((Proceso) obj);
         }
 
+        //Asignamos el modelo a la JList.
         listaComponente.setModel(modelo);
     }
     
@@ -204,11 +209,6 @@ import javax.swing.JOptionPane;
 
         Simulador.setBackground(new java.awt.Color(102, 204, 255));
 
-        ListaListo.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane17.setViewportView(ListaListo);
 
         jLabel27.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
@@ -222,15 +222,10 @@ import javax.swing.JOptionPane;
             }
         });
 
-        ListaSuspListo.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane18.setViewportView(ListaSuspListo);
 
         jLabel28.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel28.setText("Sistema Operativo");
+        jLabel28.setText("Simulador");
 
         jLabel29.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -247,28 +242,13 @@ import javax.swing.JOptionPane;
         jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel32.setText("Nuevo");
 
-        ListaSuspBloqueado.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane20.setViewportView(ListaSuspBloqueado);
 
         jLabel33.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel33.setText("Modo:");
 
-        ListaNuevo.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane21.setViewportView(ListaNuevo);
 
-        ListaBloqueado.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane22.setViewportView(ListaBloqueado);
 
         jLabel34.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
@@ -386,11 +366,6 @@ import javax.swing.JOptionPane;
             }
         });
 
-        ListaFinalizado.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane24.setViewportView(ListaFinalizado);
 
         jLabel43.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -776,13 +751,12 @@ import javax.swing.JOptionPane;
 
     private void CrearPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearPActionPerformed
        try {
-        // Recolectar datos de la Interfaz
-        String nombre = NombreProceso.getText().trim();
-        int numInstrucciones = (Integer) NInstrucciones.getValue(); 
+            // Recolectar datos de la Interfaz (esto no cambia)
+            String nombre = NombreProceso.getText().trim();
+            int numInstrucciones = (Integer) NInstrucciones.getValue();
+            String tipoSeleccionado = (String) TipoProceso.getSelectedItem();
 
-        String tipoSeleccionado = (String) TipoProceso.getSelectedItem();
-        
-        // Validar los datos de entrada
+            // Validar los datos de entrada
         if (nombre.isEmpty()) {
             JOptionPane.showMessageDialog(this, "El nombre del proceso no puede estar vacío.", "Error de Entrada", JOptionPane.ERROR_MESSAGE);
             return; // Detiene la creación del proceso
@@ -791,6 +765,26 @@ import javax.swing.JOptionPane;
             JOptionPane.showMessageDialog(this, "El número de instrucciones debe ser mayor que cero.", "Error de Entrada", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+            if ("I/O Bound".equals(tipoSeleccionado)) {
+                int ciclosGenerar = (Integer) ciclosGenerarSpinner.getValue();
+                int ciclosSatisfacer = (Integer) ciclosSatisfacerSpinner.getValue();
+                if (ciclosGenerar <= 0 || ciclosSatisfacer <= 0) {
+                    // ... (mostrar mensaje de error) ...
+                    return;
+                }
+                // En lugar de "new Proceso(...)", llamamos al método del simulador
+                miSimulador.solicitarCreacionProceso(nombre, numInstrucciones, Proceso.TipoProceso.IO_BOUND, ciclosGenerar, ciclosSatisfacer);
+
+            } else { // "CPU Bound"
+                // En lugar de "new Proceso(...)", llamamos al método del simulador
+                miSimulador.solicitarCreacionProceso(nombre, numInstrucciones, Proceso.TipoProceso.CPU_BOUND, -1, -1);
+            }
+       
+        System.out.println("Solicitud de creación para proceso '" + nombre + "' enviada al simulador.");
+        JOptionPane.showMessageDialog(this, "Proceso '" + nombre + "' creado exitosamente.", "Proceso Creado", JOptionPane.INFORMATION_MESSAGE);
+        
+        
 
         // Crear el objeto Proceso
         Proceso nuevoProceso;
@@ -853,65 +847,60 @@ import javax.swing.JOptionPane;
     }//GEN-LAST:event_CrearPActionPerformed
 
     private void CrearPAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearPAutoActionPerformed
-     // Usamos la clase Random para generar números aleatorios.
+     //clase Random para generar números aleatorios.
     java.util.Random random = new java.util.Random();
     
     for (int i = 1; i <= 10; i++) {
-        // ---  Generar Nombre y Número de Instrucciones ---
-        String nombre = "P-Auto-" + i;
-        
-        // Genera un número de instrucciones entre 10 y 50.
-        // random.nextInt(41) genera un número de 0 a 40. Le sumamos 10.
-        int numInstrucciones = random.nextInt(41) + 10; 
+        // --- 1. Generar los parámetros del proceso ---
+        String nombre = "Proceso" + i;
+        int numInstrucciones = random.nextInt(41) + 10; // Rango de 10 a 50
 
-        Proceso nuevoProceso;
-
-        // --- Decidir aleatoriamente si es CPU o I/O Bound (50/50) ---
+        // --- 2. Decidir tipo y generar parámetros específicos ---
         if (random.nextBoolean()) {
-            // --- Crear un proceso I/O BOUND ---
-            
+            // --- Parámetros para un proceso I/O BOUND ---
             int ciclosParaGenerar;
             int ciclosParaSatisfacer;
 
-            // Bucle 'do-while' para garantizar que la suma de ciclos de E/S no exceda las instrucciones totales.
             do {
-                // Ciclos para generar la excepción: un número entre 2 y la mitad de las instrucciones.
-                // Mínimo 2 para que no sea en la primera instrucción.
-                ciclosParaGenerar = random.nextInt(numInstrucciones / 2) + 2;
+                // Asegura que la interrupción ocurra dentro de los límites del programa.
+                // Mínimo 2 para que no sea al inicio.
+                ciclosParaGenerar = random.nextInt(Math.max(1, numInstrucciones / 2)) + 2;
+                
+                // Duración de la operación de E/S.
+                ciclosParaSatisfacer = random.nextInt(13) + 3; // Rango de 3 a 15
 
-                // Ciclos para satisfacer la excepción: un número entre 3 y 15.
-                ciclosParaSatisfacer = random.nextInt(13) + 3;
+            } while (ciclosParaGenerar >= numInstrucciones);
 
-            } while (ciclosParaGenerar >= numInstrucciones); // Condición de seguridad por si numInstrucciones es muy bajo.
-
-            nuevoProceso = new Proceso(
-                nombre, 
-                numInstrucciones, 
-                Proceso.TipoProceso.IO_BOUND, 
-                ciclosParaGenerar, 
-                ciclosParaSatisfacer
-            );
-            System.out.println("Creado Proceso I/O Bound: " + nombre + " (Inst: " + numInstrucciones + ", Gen: " + ciclosParaGenerar + ", Sat: " + ciclosParaSatisfacer + ")");
-
-        } else {
-            // --- Crear un proceso CPU BOUND ---
+            // --- 3. Solicitar la creación del proceso I/O Bound al Simulador ---
+            if (miSimulador != null) {
+                miSimulador.solicitarCreacionProceso(
+                    nombre, 
+                    numInstrucciones, 
+                    Proceso.TipoProceso.IO_BOUND, 
+                    ciclosParaGenerar, 
+                    ciclosParaSatisfacer
+                );
+            }
             
-            nuevoProceso = new Proceso(
-                nombre, 
-                numInstrucciones, 
-                Proceso.TipoProceso.CPU_BOUND
-            );
-            System.out.println("Creado Proceso CPU Bound: " + nombre + " (Inst: " + numInstrucciones + ")");
-        }
+        } else {
+            // --- Parámetros para un proceso CPU BOUND ---
+            // No se necesitan ciclos de E/S.
 
-        // --- 3. Entregar el proceso al simulador ---
-        if (miSimulador != null) {
-            miSimulador.agregarNuevoProceso(nuevoProceso);
+            // --- 3. Solicitar la creación del proceso CPU Bound al Simulador ---
+            if (miSimulador != null) {
+                miSimulador.solicitarCreacionProceso(
+                    nombre, 
+                    numInstrucciones, 
+                    Proceso.TipoProceso.CPU_BOUND, 
+                    -1, // Valor sentinela para ciclos de generar
+                    -1  // Valor sentinela para ciclos de satisfacer
+                );
+            }
         }
     }
     
-    // Mensaje de confirmación para el usuario.
-    JOptionPane.showMessageDialog(this, "Se han generado y añadido 10 procesos automáticamente.", "Procesos Creados", JOptionPane.INFORMATION_MESSAGE);
+    // Mensaje de confirmación único al final del bucle.
+    JOptionPane.showMessageDialog(this, "Se han solicitado 10 procesos automáticamente.", "Solicitud Enviada", JOptionPane.INFORMATION_MESSAGE);
 
     }//GEN-LAST:event_CrearPAutoActionPerformed
 
@@ -1088,12 +1077,12 @@ import javax.swing.JOptionPane;
     private javax.swing.JTabbedPane Graficos;
     private javax.swing.JToggleButton IndicadorActivo;
     private javax.swing.JToggleButton IniciarPausarButton;
-    private javax.swing.JList<String> ListaBloqueado;
-    private javax.swing.JList<String> ListaFinalizado;
-    private javax.swing.JList<String> ListaListo;
-    private javax.swing.JList<String> ListaNuevo;
-    private javax.swing.JList<String> ListaSuspBloqueado;
-    private javax.swing.JList<String> ListaSuspListo;
+    private javax.swing.JList<EstructuraDeDatos.Proceso> ListaBloqueado;
+    private javax.swing.JList<EstructuraDeDatos.Proceso> ListaFinalizado;
+    private javax.swing.JList<EstructuraDeDatos.Proceso> ListaListo;
+    private javax.swing.JList<EstructuraDeDatos.Proceso> ListaNuevo;
+    private javax.swing.JList<EstructuraDeDatos.Proceso> ListaSuspBloqueado;
+    private javax.swing.JList<EstructuraDeDatos.Proceso> ListaSuspListo;
     private javax.swing.JSpinner NInstrucciones;
     private javax.swing.JTextField NombreProceso;
     private javax.swing.JComboBox<String> PoliticaPlanificacion;
