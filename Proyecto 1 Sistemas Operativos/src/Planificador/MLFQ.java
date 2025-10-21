@@ -14,7 +14,7 @@ import EstructuraDeDatos.Proceso;
  */
 public class MLFQ implements EstrategiaPlanificacion {
     private final Cola<Proceso>[] colasDePrioridad;
-    private final int numNiveles = 3; // Ejemplo: 3 niveles de prioridad
+    private final int numNiveles = 3;
 
     @SuppressWarnings("unchecked")
     public MLFQ() {
@@ -26,16 +26,9 @@ public class MLFQ implements EstrategiaPlanificacion {
 
     @Override
     public void agregarProceso(Proceso proceso) {
-        // Los procesos nuevos o que vuelven de E/S entran a la cola de máxima prioridad (Q0)
         colasDePrioridad[0].encolar(proceso);
     }
     
-    /**
-     * Método específico para MLFQ. Mueve un proceso a una cola de menor prioridad.
-     * El SO lo llamará cuando un proceso agote su quantum.
-     * @param proceso El proceso a degradar.
-     * @param nivelActual El nivel de la cola en el que estaba.
-     */
     public void degradarProceso(Proceso proceso, int nivelActual) {
         int siguienteNivel = Math.min(nivelActual + 1, numNiveles - 1);
         colasDePrioridad[siguienteNivel].encolar(proceso);
@@ -43,13 +36,49 @@ public class MLFQ implements EstrategiaPlanificacion {
 
     @Override
     public Proceso getSiguienteProceso() {
-        // Buscar desde la cola de mayor prioridad (índice 0) hacia abajo
         for (int i = 0; i < numNiveles; i++) {
             if (!colasDePrioridad[i].estaVacia()) {
                 return colasDePrioridad[i].desencolar();
             }
         }
-        return null; // No hay procesos en ninguna cola
+        return null;
+    }
+
+    // --- NUEVOS MÉTODOS IMPLEMENTADOS ---
+
+    @Override
+    public Proceso peekSiguienteProceso() {
+        for (int i = 0; i < numNiveles; i++) {
+            if (!colasDePrioridad[i].estaVacia()) {
+                // Usamos verFrente() para no eliminarlo
+                return colasDePrioridad[i].verFrente();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public int getNumeroProcesosListos() {
+        int total = 0;
+        for (int i = 0; i < numNiveles; i++) {
+            total += colasDePrioridad[i].getTamano();
+        }
+        return total;
+    }
+
+    @Override
+    public Object[] getProcesosListosComoArray() {
+        // Necesitamos combinar los arrays de todas las colas
+        Object[] resultado = new Object[getNumeroProcesosListos()];
+        int indiceActual = 0;
+        
+        for (int i = 0; i < numNiveles; i++) {
+            Object[] arrayCola = colasDePrioridad[i].toArray(new Proceso[0]);
+            for (Object proceso : arrayCola) {
+                resultado[indiceActual++] = proceso;
+            }
+        }
+        return resultado;
     }
 
     @Override

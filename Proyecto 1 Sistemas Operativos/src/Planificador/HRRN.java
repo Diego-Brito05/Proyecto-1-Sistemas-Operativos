@@ -26,6 +26,33 @@ public class HRRN implements EstrategiaPlanificacion {
 
     @Override
     public Proceso getSiguienteProceso() {
+        Proceso mejorProceso = encontrarProcesoConMejorRatio();
+        if (mejorProceso != null) {
+            listaListos.eliminar(mejorProceso);
+        }
+        return mejorProceso;
+    }
+    
+    // --- NUEVOS MÉTODOS IMPLEMENTADOS ---
+
+    @Override
+    public Proceso peekSiguienteProceso() {
+        return encontrarProcesoConMejorRatio();
+    }
+
+    @Override
+    public int getNumeroProcesosListos() {
+        return listaListos.getTamano();
+    }
+
+    @Override
+    public Object[] getProcesosListosComoArray() {
+        return listaListos.obtenerComoArray();
+    }
+
+    // --- MÉTODO AUXILIAR ---
+
+    private Proceso encontrarProcesoConMejorRatio() {
         if (listaListos.estaVacia()) {
             return null;
         }
@@ -38,11 +65,10 @@ public class HRRN implements EstrategiaPlanificacion {
 
         for (Object obj : procesosArray) {
             Proceso p = (Proceso) obj;
-            
             long tiempoEspera = p.getTiempoEsperaTotal();
             long tiempoServicio = p.getTotalInstrucciones();
             
-            if (tiempoServicio == 0) continue; // Evitar división por cero
+            if (tiempoServicio == 0) continue;
             
             double ratio = (double) (tiempoEspera + tiempoServicio) / tiempoServicio;
             
@@ -51,11 +77,6 @@ public class HRRN implements EstrategiaPlanificacion {
                 mejorProceso = p;
             }
         }
-        
-        if (mejorProceso != null) {
-            listaListos.eliminar(mejorProceso);
-        }
-        
         return mejorProceso;
     }
 

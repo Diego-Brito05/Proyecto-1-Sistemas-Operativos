@@ -27,6 +27,33 @@ public class SRT implements EstrategiaPlanificacion {
 
     @Override
     public Proceso getSiguienteProceso() {
+        Proceso procesoConMenorTiempo = encontrarProcesoConMenorTiempo();
+        if (procesoConMenorTiempo != null) {
+            listaListos.eliminar(procesoConMenorTiempo);
+        }
+        return procesoConMenorTiempo;
+    }
+    
+    // --- NUEVOS MÉTODOS IMPLEMENTADOS ---
+
+    @Override
+    public Proceso peekSiguienteProceso() {
+        return encontrarProcesoConMenorTiempo();
+    }
+
+    @Override
+    public int getNumeroProcesosListos() {
+        return listaListos.getTamano();
+    }
+
+    @Override
+    public Object[] getProcesosListosComoArray() {
+        return listaListos.obtenerComoArray();
+    }
+
+    // --- MÉTODO AUXILIAR ---
+
+    private Proceso encontrarProcesoConMenorTiempo() {
         if (listaListos.estaVacia()) {
             return null;
         }
@@ -38,13 +65,10 @@ public class SRT implements EstrategiaPlanificacion {
 
         for (int i = 1; i < procesosArray.length; i++) {
             Proceso pActual = (Proceso) procesosArray[i];
-            // La única diferencia con SPN es que se compara la ráfaga RESTANTE.
             if (pActual.getRafagaRestante() < procesoConMenorTiempo.getRafagaRestante()) {
                 procesoConMenorTiempo = pActual;
             }
         }
-
-        listaListos.eliminar(procesoConMenorTiempo);
         return procesoConMenorTiempo;
     }
 

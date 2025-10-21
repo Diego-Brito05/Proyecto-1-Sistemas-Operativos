@@ -38,16 +38,15 @@ public class Menu extends javax.swing.JFrame {
         jScrollPane17 = new javax.swing.JScrollPane();
         ListaListo = new javax.swing.JList<>();
         jLabel27 = new javax.swing.JLabel();
-        jToggleButton3 = new javax.swing.JToggleButton();
+        IndicadorActivo = new javax.swing.JToggleButton();
         jScrollPane18 = new javax.swing.JScrollPane();
         ListaSuspListo = new javax.swing.JList<>();
         jLabel28 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
         jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
         jScrollPane19 = new javax.swing.JScrollPane();
-        jTextArea6 = new javax.swing.JTextArea();
+        CicloActual = new javax.swing.JTextArea();
         jLabel32 = new javax.swing.JLabel();
         jScrollPane20 = new javax.swing.JScrollPane();
         ListaSuspBloqueado = new javax.swing.JList<>();
@@ -57,7 +56,7 @@ public class Menu extends javax.swing.JFrame {
         jScrollPane22 = new javax.swing.JScrollPane();
         ListaBloqueado = new javax.swing.JList<>();
         ModoSistema = new javax.swing.JScrollPane();
-        jTextArea7 = new javax.swing.JTextArea();
+        modoAct = new javax.swing.JTextArea();
         jLabel34 = new javax.swing.JLabel();
         jLabel35 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
@@ -82,6 +81,7 @@ public class Menu extends javax.swing.JFrame {
         jLabel44 = new javax.swing.JLabel();
         PoliticaPlanificacion = new javax.swing.JComboBox<>();
         CambiarPolitica = new javax.swing.JButton();
+        IniciarPausarButton = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -126,7 +126,7 @@ public class Menu extends javax.swing.JFrame {
         jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel27.setText("Listo");
 
-        jToggleButton3.setBackground(new java.awt.Color(51, 255, 0));
+        IndicadorActivo.setBackground(new java.awt.Color(51, 255, 0));
 
         ListaSuspListo.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -137,13 +137,6 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel28.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel28.setText("Sistema Operativo");
-
-        jButton6.setText("Pausa");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
 
         jLabel29.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -156,9 +149,9 @@ public class Menu extends javax.swing.JFrame {
         jLabel31.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel31.setText("Listo");
 
-        jTextArea6.setColumns(20);
-        jTextArea6.setRows(5);
-        jScrollPane19.setViewportView(jTextArea6);
+        CicloActual.setColumns(20);
+        CicloActual.setRows(5);
+        jScrollPane19.setViewportView(CicloActual);
 
         jLabel32.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -188,9 +181,9 @@ public class Menu extends javax.swing.JFrame {
         });
         jScrollPane22.setViewportView(ListaBloqueado);
 
-        jTextArea7.setColumns(20);
-        jTextArea7.setRows(5);
-        ModoSistema.setViewportView(jTextArea7);
+        modoAct.setColumns(20);
+        modoAct.setRows(5);
+        ModoSistema.setViewportView(modoAct);
 
         jLabel34.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         jLabel34.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -356,6 +349,13 @@ public class Menu extends javax.swing.JFrame {
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
+        IniciarPausarButton.setText("Pausar/Iniciar");
+        IniciarPausarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IniciarPausarButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout SimuladorLayout = new javax.swing.GroupLayout(Simulador);
         Simulador.setLayout(SimuladorLayout);
         SimuladorLayout.setHorizontalGroup(
@@ -377,19 +377,18 @@ public class Menu extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(SimuladorLayout.createSequentialGroup()
                                 .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(IniciarPausarButton))
+                                .addGap(18, 18, 18)
+                                .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(SimuladorLayout.createSequentialGroup()
-                                        .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jScrollPane22, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(SimuladorLayout.createSequentialGroup()
-                                                .addComponent(jScrollPane22, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(SimuladorLayout.createSequentialGroup()
-                                                .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(ModoSistema, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(SimuladorLayout.createSequentialGroup()
+                                        .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(ModoSistema, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
                                 .addComponent(jScrollPane24, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -412,7 +411,7 @@ public class Menu extends javax.swing.JFrame {
                                 .addGap(134, 134, 134)
                                 .addComponent(jScrollPane20, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SimuladorLayout.createSequentialGroup()
-                        .addComponent(jToggleButton3)
+                        .addComponent(IndicadorActivo)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -430,14 +429,16 @@ public class Menu extends javax.swing.JFrame {
                 .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(SimuladorLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel33)
-                        .addGap(3, 3, 3))
+                        .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel33)
+                            .addComponent(IniciarPausarButton))
+                        .addGap(1, 1, 1))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, SimuladorLayout.createSequentialGroup()
                         .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(SimuladorLayout.createSequentialGroup()
                                 .addGap(26, 26, 26)
                                 .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jToggleButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(IndicadorActivo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel28)))
                             .addGroup(SimuladorLayout.createSequentialGroup()
                                 .addGap(34, 34, 34)
@@ -475,9 +476,7 @@ public class Menu extends javax.swing.JFrame {
                                                     .addComponent(jScrollPane18, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                             .addComponent(jScrollPane24))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(ModoSistema, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jButton6)))
+                                        .addComponent(ModoSistema, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(SimuladorLayout.createSequentialGroup()
                                         .addGap(0, 0, Short.MAX_VALUE)
                                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
@@ -620,9 +619,9 @@ public class Menu extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_CambiarPoliticaActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void IniciarPausarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarPausarButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_IniciarPausarButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -651,10 +650,13 @@ public class Menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CambiarPolitica;
+    private javax.swing.JTextArea CicloActual;
     private javax.swing.JPanel Configuracion;
     private javax.swing.JButton CrearP;
     private javax.swing.JButton CrearPAuto;
     private javax.swing.JPanel Estadisticas;
+    private javax.swing.JToggleButton IndicadorActivo;
+    private javax.swing.JToggleButton IniciarPausarButton;
     private javax.swing.JList<String> ListaBloqueado;
     private javax.swing.JList<String> ListaFinalizado;
     private javax.swing.JList<String> ListaListo;
@@ -669,7 +671,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> TipoProceso;
     private javax.swing.JSpinner ciclosGenerarSpinner;
     private javax.swing.JSpinner ciclosSatisfacerSpinner;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
@@ -698,8 +699,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane22;
     private javax.swing.JScrollPane jScrollPane24;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTextArea jTextArea6;
-    private javax.swing.JTextArea jTextArea7;
-    private javax.swing.JToggleButton jToggleButton3;
+    private javax.swing.JTextArea modoAct;
     // End of variables declaration//GEN-END:variables
 }

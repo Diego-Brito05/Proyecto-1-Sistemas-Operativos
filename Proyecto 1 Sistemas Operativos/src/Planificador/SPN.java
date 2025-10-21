@@ -24,6 +24,34 @@ public class SPN implements EstrategiaPlanificacion {
 
     @Override
     public Proceso getSiguienteProceso() {
+        Proceso procesoMasCorto = encontrarProcesoMasCorto();
+        if (procesoMasCorto != null) {
+            listaListos.eliminar(procesoMasCorto);
+        }
+        return procesoMasCorto;
+    }
+
+    // --- NUEVOS MÉTODOS IMPLEMENTADOS ---
+
+    @Override
+    public Proceso peekSiguienteProceso() {
+        // Reutilizamos la lógica de búsqueda sin eliminar el proceso.
+        return encontrarProcesoMasCorto();
+    }
+
+    @Override
+    public int getNumeroProcesosListos() {
+        return listaListos.getTamano();
+    }
+    
+    @Override
+    public Object[] getProcesosListosComoArray() {
+        return listaListos.obtenerComoArray();
+    }
+    
+    // --- MÉTODO AUXILIAR PARA EVITAR REPETIR CÓDIGO ---
+
+    private Proceso encontrarProcesoMasCorto() {
         if (listaListos.estaVacia()) {
             return null;
         }
@@ -39,8 +67,6 @@ public class SPN implements EstrategiaPlanificacion {
                 procesoMasCorto = pActual;
             }
         }
-
-        listaListos.eliminar(procesoMasCorto);
         return procesoMasCorto;
     }
 

@@ -19,22 +19,30 @@ import EstructuraDeDatos.Proceso;
  */
 public interface EstrategiaPlanificacion {
 
-    /**
-     * Añade un proceso a las colas de listos.
-     * @param proceso El proceso a añadir.
-     */
     void agregarProceso(Proceso proceso);
+    Proceso getSiguienteProceso();
+    String getNombre();
+
+    // --- NUEVOS MÉTODOS NECESARIOS ---
 
     /**
-     * Selecciona el siguiente proceso a ejecutar según la política,
-     * eliminándolo de la(s) cola(s) de listos.
-     * @return El proceso seleccionado, o null si no hay ninguno.
+     * Devuelve el siguiente proceso que sería elegido, PERO SIN QUITARLO de la cola.
+     * Esencial para que el planificador SRT pueda decidir si debe expropiar al proceso actual.
+     * @return El próximo proceso, o null si no hay ninguno.
      */
-    Proceso getSiguienteProceso();
+    Proceso peekSiguienteProceso();
+
+    /**
+     * Devuelve el número de procesos actualmente en estado LISTO.
+     * Necesario para que el planificador de mediano plazo sepa si hay memoria disponible.
+     * @return El conteo de procesos listos.
+     */
+    int getNumeroProcesosListos();
     
     /**
-     * Devuelve el nombre del algoritmo para mostrar en la GUI.
-     * @return String con el nombre de la estrategia.
+     * Devuelve todos los procesos en estado LISTO en un array.
+     * Necesario para que el simulador pueda actualizar los tiempos de espera (HRRN).
+     * @return Un array de Object con los procesos listos.
      */
-    String getNombre();
+    Object[] getProcesosListosComoArray();
 }

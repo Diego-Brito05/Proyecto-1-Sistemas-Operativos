@@ -19,7 +19,6 @@ public class RoundRobin implements EstrategiaPlanificacion {
 
     @Override
     public void agregarProceso(Proceso proceso) {
-        // Un proceso nuevo, o uno que agotó su quantum, va al final de la cola.
         colaListos.encolar(proceso);
     }
 
@@ -31,6 +30,23 @@ public class RoundRobin implements EstrategiaPlanificacion {
     @Override
     public String getNombre() {
         return "Round Robin (RR)";
+    }
+    
+    // --- NUEVOS MÉTODOS IMPLEMENTADOS ---
+
+    @Override
+    public Proceso peekSiguienteProceso() {
+        return colaListos.verFrente();
+    }
+
+    @Override
+    public int getNumeroProcesosListos() {
+        return colaListos.getTamano();
+    }
+
+    @Override
+    public Object[] getProcesosListosComoArray() {
+        return colaListos.toArray(new Proceso[0]);
     }
 }
 
