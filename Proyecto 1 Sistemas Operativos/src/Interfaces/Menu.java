@@ -193,11 +193,6 @@ import javax.swing.JOptionPane;
         IniciarPausarButton = new javax.swing.JToggleButton();
         modoAct = new javax.swing.JTextArea();
         CicloActual = new javax.swing.JTextArea();
-        Graficos = new javax.swing.JTabbedPane();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        Estadísticas = new javax.swing.JPanel();
         Configuracion = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
@@ -208,6 +203,11 @@ import javax.swing.JOptionPane;
         DurCicloRelojAct = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         CambiarCicloReloj = new javax.swing.JButton();
+        Graficos = new javax.swing.JTabbedPane();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        Estadísticas = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -271,6 +271,8 @@ import javax.swing.JOptionPane;
 
         jLabel37.setText("Nombre:");
 
+        NInstrucciones.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+
         jLabel38.setText("Num. Instrucciones:");
 
         jLabel39.setText("Tipo:");
@@ -289,7 +291,11 @@ import javax.swing.JOptionPane;
 
         jLabel41.setText("Ciclos para generar exepcion:");
 
+        ciclosGenerarSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+
         jLabel42.setText("Ciclos para satisfacer exepcion:");
+
+        ciclosSatisfacerSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         CrearP.setText("Crear Proceso");
         CrearP.addActionListener(new java.awt.event.ActionListener() {
@@ -553,62 +559,6 @@ import javax.swing.JOptionPane;
 
         jTabbedPane2.addTab("Simulador", Simulador);
 
-        Graficos.setBackground(new java.awt.Color(204, 255, 204));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1559, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 738, Short.MAX_VALUE)
-        );
-
-        Graficos.addTab("Comparación Throughpouts", jPanel2);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1559, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 738, Short.MAX_VALUE)
-        );
-
-        Graficos.addTab("Comparación I/O Bound y CPU Bound", jPanel3);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1559, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 738, Short.MAX_VALUE)
-        );
-
-        Graficos.addTab("Comparación Tiempo Políticas", jPanel4);
-
-        jTabbedPane2.addTab("Graficos", Graficos);
-
-        javax.swing.GroupLayout EstadísticasLayout = new javax.swing.GroupLayout(Estadísticas);
-        Estadísticas.setLayout(EstadísticasLayout);
-        EstadísticasLayout.setHorizontalGroup(
-            EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1559, Short.MAX_VALUE)
-        );
-        EstadísticasLayout.setVerticalGroup(
-            EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 773, Short.MAX_VALUE)
-        );
-
-        jTabbedPane2.addTab("Estadísticas", Estadísticas);
-
         Configuracion.setBackground(new java.awt.Color(153, 153, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -616,7 +566,7 @@ import javax.swing.JOptionPane;
 
         jPanel5.setBackground(new java.awt.Color(204, 204, 255));
 
-        DurCicloReloj.setModel(new javax.swing.SpinnerNumberModel(0.25d, null, null, 0.25d));
+        DurCicloReloj.setModel(new javax.swing.SpinnerNumberModel(0.25d, 0.0d, null, 0.25d));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Duración Actual del Ciclo de reloj");
@@ -722,6 +672,62 @@ import javax.swing.JOptionPane;
 
         jTabbedPane2.addTab("Configuración", Configuracion);
 
+        Graficos.setBackground(new java.awt.Color(204, 255, 204));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1559, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 738, Short.MAX_VALUE)
+        );
+
+        Graficos.addTab("Comparación Throughpouts", jPanel2);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1559, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 738, Short.MAX_VALUE)
+        );
+
+        Graficos.addTab("Comparación I/O Bound y CPU Bound", jPanel3);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1559, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 738, Short.MAX_VALUE)
+        );
+
+        Graficos.addTab("Comparación Tiempo Políticas", jPanel4);
+
+        jTabbedPane2.addTab("Graficos", Graficos);
+
+        javax.swing.GroupLayout EstadísticasLayout = new javax.swing.GroupLayout(Estadísticas);
+        Estadísticas.setLayout(EstadísticasLayout);
+        EstadísticasLayout.setHorizontalGroup(
+            EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1559, Short.MAX_VALUE)
+        );
+        EstadísticasLayout.setVerticalGroup(
+            EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 773, Short.MAX_VALUE)
+        );
+
+        jTabbedPane2.addTab("Estadísticas", Estadísticas);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -742,93 +748,48 @@ import javax.swing.JOptionPane;
 
     private void CrearPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearPActionPerformed
        try {
-            // Recolectar datos de la Interfaz (esto no cambia)
-            String nombre = NombreProceso.getText().trim();
-            int numInstrucciones = (Integer) NInstrucciones.getValue();
-            String tipoSeleccionado = (String) TipoProceso.getSelectedItem();
+        // --- 1. Recolectar datos de la Interfaz ---
+        String nombre = NombreProceso.getText().trim();
+        int numInstrucciones = (Integer) NInstrucciones.getValue();
+        String tipoSeleccionado = (String) TipoProceso.getSelectedItem();
 
-            // Validar los datos de entrada
+        // --- 2. Validar los datos de entrada ---
         if (nombre.isEmpty()) {
             JOptionPane.showMessageDialog(this, "El nombre del proceso no puede estar vacío.", "Error de Entrada", JOptionPane.ERROR_MESSAGE);
-            return; // Detiene la creación del proceso
+            return;
         }
         if (numInstrucciones <= 0) {
             JOptionPane.showMessageDialog(this, "El número de instrucciones debe ser mayor que cero.", "Error de Entrada", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-            if ("I/O Bound".equals(tipoSeleccionado)) {
-                int ciclosGenerar = (Integer) ciclosGenerarSpinner.getValue();
-                int ciclosSatisfacer = (Integer) ciclosSatisfacerSpinner.getValue();
-                if (ciclosGenerar <= 0 || ciclosSatisfacer <= 0) {
-                    // ... (mostrar mensaje de error) ...
-                    return;
-                }
-                // En lugar de "new Proceso(...)", llamamos al método del simulador
-                miSimulador.solicitarCreacionProceso(nombre, numInstrucciones, Proceso.TipoProceso.IO_BOUND, ciclosGenerar, ciclosSatisfacer);
-
-            } else { // "CPU Bound"
-                // En lugar de "new Proceso(...)", llamamos al método del simulador
-                miSimulador.solicitarCreacionProceso(nombre, numInstrucciones, Proceso.TipoProceso.CPU_BOUND, -1, -1);
-            }
-       
-        System.out.println("Solicitud de creación para proceso '" + nombre + "' enviada al simulador.");
-        JOptionPane.showMessageDialog(this, "Proceso '" + nombre + "' creado exitosamente.", "Proceso Creado", JOptionPane.INFORMATION_MESSAGE);
-        
-        
-
-        // Crear el objeto Proceso
-        Proceso nuevoProceso;
-
+        // --- 3. Solicitar la creación del proceso al Simulador (LA ÚNICA FORMA) ---
         if ("I/O Bound".equals(tipoSeleccionado)) {
-           
             int ciclosGenerar = (Integer) ciclosGenerarSpinner.getValue();
             int ciclosSatisfacer = (Integer) ciclosSatisfacerSpinner.getValue();
 
-           
             if (ciclosGenerar <= 0 || ciclosSatisfacer <= 0) {
                 JOptionPane.showMessageDialog(this, "Para un proceso I/O Bound, los ciclos de excepción deben ser mayores que cero.", "Error de Entrada", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
-            // Usamos el constructor para I/O Bound
-            nuevoProceso = new Proceso(
-                nombre, 
-                numInstrucciones, 
-                Proceso.TipoProceso.IO_BOUND, 
-                ciclosGenerar, 
-                ciclosSatisfacer
-            );
+            // Llamamos al método centralizado del simulador
+            miSimulador.solicitarCreacionProceso(nombre, numInstrucciones, Proceso.TipoProceso.IO_BOUND, ciclosGenerar, ciclosSatisfacer);
 
         } else { // "CPU Bound"
-            // Es CPU Bound, no necesitamos los ciclos de excepción
-            // Usamos el constructor para CPU Bound
-            nuevoProceso = new Proceso(
-                nombre, 
-                numInstrucciones, 
-                Proceso.TipoProceso.CPU_BOUND
-            );
+            // Llamamos al método centralizado del simulador
+            miSimulador.solicitarCreacionProceso(nombre, numInstrucciones, Proceso.TipoProceso.CPU_BOUND, -1, -1);
         }
        
-        //  Entregar el proceso al CPU
-         if (miSimulador != null) {
-          miSimulador.agregarNuevoProceso(nuevoProceso);
+        // --- 4. Confirmar al usuario y limpiar la interfaz ---
+        System.out.println("Solicitud de creación para proceso '" + nombre + "' enviada al simulador.");
+        JOptionPane.showMessageDialog(this, "Proceso '" + nombre + "' creado exitosamente.", "Proceso Creado", JOptionPane.INFORMATION_MESSAGE);
         
-        System.out.println("Proceso creado y añadido: " + nuevoProceso.toString());
-            // Opcional: Mostrar un mensaje de éxito
-           JOptionPane.showMessageDialog(this, "Proceso '" + nombre + "' creado exitosamente.", "Proceso Creado", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-             System.err.println("Error: La referencia al simulador es nula.");
-        }
-
         // Limpiar los campos para el siguiente proceso
         NombreProceso.setText("");
         NInstrucciones.setValue(0);
         TipoProceso.setSelectedIndex(0);
         ciclosGenerarSpinner.setValue(0);
         ciclosSatisfacerSpinner.setValue(0);
-
-   
         
     } catch (Exception ex) {
         // Captura cualquier otro error inesperado
