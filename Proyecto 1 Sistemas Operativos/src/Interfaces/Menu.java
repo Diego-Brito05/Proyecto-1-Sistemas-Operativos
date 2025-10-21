@@ -5,22 +5,126 @@
 package Interfaces;
 
 import EstructuraDeDatos.Proceso;
+import Planificador.EstrategiaPlanificacion;
+import Planificador.FCFS;
+import Planificador.HRRN;
+import Planificador.MLFQ;
+import Planificador.RoundRobin;
+import Planificador.SPN;
+import Planificador.SRT;
+import Simulador.Simulador;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Diego
  */
-public class Menu extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Menu.class.getName());
+    public class Menu extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Menu
-     */
+    // se Declara el logger aquí, como un miembro ESTÁTICO y FINAL de la clase.
+    // De esta forma, es visible para el método estático 'main'.
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Menu.class.getName());
+    
+    
+    private Simulador miSimulador;
+    private javax.swing.Timer guiUpdateTimer;
+
+    // En el constructor de tu clase Menu
     public Menu() {
-        initComponents();
+        initComponents(); // Método de NetBeans que crea los componentes
+
+        miSimulador = new Simulador();
+        configurarEstadoInicial();
+        
+        actualizarDisplayDuracionCiclo();
+        // Timer para que actualice la GUI cada 250ms (4 veces por segundo)
+        guiUpdateTimer = new javax.swing.Timer(250, new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                actualizarGUI(); // Este será nuestro método principal de refresco
+            }
+        });
+        guiUpdateTimer.start(); // Inicia el timer
     }
+
+    // Método para establecer los valores iniciales de la GUI
+    private void configurarEstadoInicial() {
+        IniciarPausarButton.setSelected(false);
+        IniciarPausarButton.setText("Iniciar");
+        IndicadorActivo.setSelected(false);
+        IndicadorActivo.setBackground(java.awt.Color.RED);
+        modoAct.setText("Modo Supervisor");
+    }
+
+    // método principal llamado por el Timer
+    private void actualizarGUI() {
+        // código para actualizar TODOS los componentes visuales
+        actualizarCicloYModo();
+        actualizarTodasLasListas();
+    }
+    
+    private void actualizarCicloYModo() {
+        // Actualizar el ciclo de reloj
+        CicloActual.setText(String.valueOf(miSimulador.getClock().getCicloActual()));
+
+        // Actualizar el modo de operación
+        if (miSimulador.isSistemaOperativoActivo()) {
+            modoAct.setText("Supervisor");
+        } else {
+            modoAct.setText("Usuario");
+        }
+    }
+    
+    
+    private void actualizarListaProcesos(javax.swing.JList<String> listaComponente, Object[] procesos) {
+    javax.swing.DefaultListModel<String> modelo = new javax.swing.DefaultListModel<>();
+    
+        for (Object obj : procesos) {
+            Proceso p = (Proceso) obj;
+
+            String tipo = p.esIOBound() ? "I/O bound" : "CPU bound";
+
+            String infoProceso = String.format("ID:%-3d | PC:%-4d | MAR:%-4d | %s", 
+                                                p.getId(), 
+                                                p.getProgramCounter(), 
+                                                p.getMemoryAddressRegister(), 
+                                                tipo);
+            modelo.addElement(infoProceso);
+        }
+
+        listaComponente.setModel(modelo);
+    }
+    
+    
+    private void actualizarTodasLasListas() {
+    // Obtener los datos de cada cola del simulador y pasarlos al método helper para dibujarlos
+    actualizarListaProcesos(ListaNuevo, miSimulador.getColaNuevos());
+    actualizarListaProcesos(ListaListo, miSimulador.getColaListos());
+    actualizarListaProcesos(ListaBloqueado, miSimulador.getColaBloqueados());
+    actualizarListaProcesos(ListaFinalizado, miSimulador.getColaTerminados());
+    actualizarListaProcesos(ListaSuspListo, miSimulador.getColaSuspendidosListos());
+    actualizarListaProcesos(ListaSuspBloqueado, miSimulador.getColaSuspendidosBloqueados());
+    }
+    
+    private void actualizarDisplayDuracionCiclo() {
+    if (miSimulador != null) {
+        
+        long duracionMs = miSimulador.getClock().getDuracionCicloMs();
+
+        
+        double duracionSegundos = duracionMs / 1000.0;
+
+        
+        String textoDuracion = String.format("%.2f", duracionSegundos);
+
+       
+        DurCicloRelojAct.setText(textoDuracion);
+        }
+    }
+    
+    
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -32,8 +136,6 @@ public class Menu extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane2 = new javax.swing.JTabbedPane();
-        Configuracion = new javax.swing.JPanel();
-        Estadisticas = new javax.swing.JPanel();
         Simulador = new javax.swing.JPanel();
         jScrollPane17 = new javax.swing.JScrollPane();
         ListaListo = new javax.swing.JList<>();
@@ -45,8 +147,6 @@ public class Menu extends javax.swing.JFrame {
         jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
-        jScrollPane19 = new javax.swing.JScrollPane();
-        CicloActual = new javax.swing.JTextArea();
         jLabel32 = new javax.swing.JLabel();
         jScrollPane20 = new javax.swing.JScrollPane();
         ListaSuspBloqueado = new javax.swing.JList<>();
@@ -55,8 +155,6 @@ public class Menu extends javax.swing.JFrame {
         ListaNuevo = new javax.swing.JList<>();
         jScrollPane22 = new javax.swing.JScrollPane();
         ListaBloqueado = new javax.swing.JList<>();
-        ModoSistema = new javax.swing.JScrollPane();
-        modoAct = new javax.swing.JTextArea();
         jLabel34 = new javax.swing.JLabel();
         jLabel35 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
@@ -82,36 +180,27 @@ public class Menu extends javax.swing.JFrame {
         PoliticaPlanificacion = new javax.swing.JComboBox<>();
         CambiarPolitica = new javax.swing.JButton();
         IniciarPausarButton = new javax.swing.JToggleButton();
+        modoAct = new javax.swing.JTextArea();
+        CicloActual = new javax.swing.JTextArea();
+        Graficos = new javax.swing.JTabbedPane();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        Estadísticas = new javax.swing.JPanel();
+        Configuracion = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        DurCicloReloj = new javax.swing.JSpinner();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        DurCicloRelojAct = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        CambiarCicloReloj = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTabbedPane2.setBackground(new java.awt.Color(204, 204, 255));
-
-        javax.swing.GroupLayout ConfiguracionLayout = new javax.swing.GroupLayout(Configuracion);
-        Configuracion.setLayout(ConfiguracionLayout);
-        ConfiguracionLayout.setHorizontalGroup(
-            ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1199, Short.MAX_VALUE)
-        );
-        ConfiguracionLayout.setVerticalGroup(
-            ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 623, Short.MAX_VALUE)
-        );
-
-        jTabbedPane2.addTab("Configuracion", Configuracion);
-
-        javax.swing.GroupLayout EstadisticasLayout = new javax.swing.GroupLayout(Estadisticas);
-        Estadisticas.setLayout(EstadisticasLayout);
-        EstadisticasLayout.setHorizontalGroup(
-            EstadisticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1199, Short.MAX_VALUE)
-        );
-        EstadisticasLayout.setVerticalGroup(
-            EstadisticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 623, Short.MAX_VALUE)
-        );
-
-        jTabbedPane2.addTab("Estadisticas", Estadisticas);
+        jTabbedPane2.setBackground(new java.awt.Color(255, 153, 153));
 
         Simulador.setBackground(new java.awt.Color(102, 204, 255));
 
@@ -127,6 +216,11 @@ public class Menu extends javax.swing.JFrame {
         jLabel27.setText("Listo");
 
         IndicadorActivo.setBackground(new java.awt.Color(51, 255, 0));
+        IndicadorActivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IndicadorActivoActionPerformed(evt);
+            }
+        });
 
         ListaSuspListo.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -148,10 +242,6 @@ public class Menu extends javax.swing.JFrame {
         jLabel31.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel31.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel31.setText("Listo");
-
-        CicloActual.setColumns(20);
-        CicloActual.setRows(5);
-        jScrollPane19.setViewportView(CicloActual);
 
         jLabel32.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -180,10 +270,6 @@ public class Menu extends javax.swing.JFrame {
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane22.setViewportView(ListaBloqueado);
-
-        modoAct.setColumns(20);
-        modoAct.setRows(5);
-        ModoSistema.setViewportView(modoAct);
 
         jLabel34.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         jLabel34.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -335,7 +421,7 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(jLabel44, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(PoliticaPlanificacion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(CambiarPolitica, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -349,12 +435,23 @@ public class Menu extends javax.swing.JFrame {
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
-        IniciarPausarButton.setText("Pausar/Iniciar");
+        IniciarPausarButton.setText("Iniciar");
+        IniciarPausarButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                IniciarPausarButtonItemStateChanged(evt);
+            }
+        });
         IniciarPausarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 IniciarPausarButtonActionPerformed(evt);
             }
         });
+
+        modoAct.setColumns(20);
+        modoAct.setRows(5);
+
+        CicloActual.setColumns(20);
+        CicloActual.setRows(5);
 
         javax.swing.GroupLayout SimuladorLayout = new javax.swing.GroupLayout(Simulador);
         Simulador.setLayout(SimuladorLayout);
@@ -363,7 +460,7 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(SimuladorLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SimuladorLayout.createSequentialGroup()
+                    .addGroup(SimuladorLayout.createSequentialGroup()
                         .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(SimuladorLayout.createSequentialGroup()
                                 .addGap(30, 30, 30)
@@ -378,7 +475,7 @@ public class Menu extends javax.swing.JFrame {
                             .addGroup(SimuladorLayout.createSequentialGroup()
                                 .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(IniciarPausarButton))
+                                    .addComponent(IniciarPausarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(SimuladorLayout.createSequentialGroup()
@@ -388,7 +485,7 @@ public class Menu extends javax.swing.JFrame {
                                     .addGroup(SimuladorLayout.createSequentialGroup()
                                         .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(ModoSistema, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(modoAct, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
                                 .addComponent(jScrollPane24, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -410,17 +507,20 @@ public class Menu extends javax.swing.JFrame {
                             .addGroup(SimuladorLayout.createSequentialGroup()
                                 .addGap(134, 134, 134)
                                 .addComponent(jScrollPane20, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SimuladorLayout.createSequentialGroup()
+                    .addGroup(SimuladorLayout.createSequentialGroup()
                         .addComponent(IndicadorActivo)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane18, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(SimuladorLayout.createSequentialGroup()
+                                .addComponent(jScrollPane18, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(152, 152, 152))
                             .addGroup(SimuladorLayout.createSequentialGroup()
                                 .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane19, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(CicloActual, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(13, 13, 13)))))
                 .addGap(18, 18, 18))
         );
         SimuladorLayout.setVerticalGroup(
@@ -432,7 +532,7 @@ public class Menu extends javax.swing.JFrame {
                         .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel33)
                             .addComponent(IniciarPausarButton))
-                        .addGap(1, 1, 1))
+                        .addGap(9, 9, 9))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, SimuladorLayout.createSequentialGroup()
                         .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(SimuladorLayout.createSequentialGroup()
@@ -442,9 +542,10 @@ public class Menu extends javax.swing.JFrame {
                                     .addComponent(jLabel28)))
                             .addGroup(SimuladorLayout.createSequentialGroup()
                                 .addGap(34, 34, 34)
-                                .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel30, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane19, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                                .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SimuladorLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(CicloActual, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(76, 76, 76)
                         .addComponent(CrearPAuto)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -462,6 +563,9 @@ public class Menu extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(SimuladorLayout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(SimuladorLayout.createSequentialGroup()
                                         .addGroup(SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(jScrollPane21)
                                             .addComponent(jScrollPane22)
@@ -475,15 +579,182 @@ public class Menu extends javax.swing.JFrame {
                                                     .addComponent(jScrollPane20, javax.swing.GroupLayout.Alignment.TRAILING)
                                                     .addComponent(jScrollPane18, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                             .addComponent(jScrollPane24))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(ModoSistema, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(SimuladorLayout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                .addGap(15, 15, 15))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(modoAct, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 6, Short.MAX_VALUE)))))))
+                .addGap(7, 7, 7))
         );
 
         jTabbedPane2.addTab("Simulador", Simulador);
+
+        Graficos.setBackground(new java.awt.Color(204, 255, 204));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1221, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 588, Short.MAX_VALUE)
+        );
+
+        Graficos.addTab("Comparación Throughpouts", jPanel2);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1221, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 588, Short.MAX_VALUE)
+        );
+
+        Graficos.addTab("Comparación I/O Bound y CPU Bound", jPanel3);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1221, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 588, Short.MAX_VALUE)
+        );
+
+        Graficos.addTab("Comparación Tiempo Políticas", jPanel4);
+
+        jTabbedPane2.addTab("Graficos", Graficos);
+
+        javax.swing.GroupLayout EstadísticasLayout = new javax.swing.GroupLayout(Estadísticas);
+        Estadísticas.setLayout(EstadísticasLayout);
+        EstadísticasLayout.setHorizontalGroup(
+            EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1221, Short.MAX_VALUE)
+        );
+        EstadísticasLayout.setVerticalGroup(
+            EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 623, Short.MAX_VALUE)
+        );
+
+        jTabbedPane2.addTab("Estadísticas", Estadísticas);
+
+        Configuracion.setBackground(new java.awt.Color(153, 153, 255));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setText("Configuración");
+
+        jPanel5.setBackground(new java.awt.Color(204, 204, 255));
+
+        DurCicloReloj.setModel(new javax.swing.SpinnerNumberModel(0.25d, null, null, 0.25d));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setText("Duración Actual del Ciclo de reloj");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setText("Segundos");
+
+        DurCicloRelojAct.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        DurCicloRelojAct.setText("0,25");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(87, 87, 87)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(DurCicloRelojAct))))
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(DurCicloRelojAct)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addGap(35, 35, 35))
+        );
+
+        jLabel4.setText("Cambiar duración de ciclos de reloj");
+
+        CambiarCicloReloj.setText("Guardar Cambios");
+        CambiarCicloReloj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CambiarCicloRelojActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(DurCicloReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addComponent(CambiarCicloReloj)
+                        .addGap(44, 44, 44)))
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(54, 54, 54)
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(DurCicloReloj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(CambiarCicloReloj)))
+                .addContainerGap(40, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout ConfiguracionLayout = new javax.swing.GroupLayout(Configuracion);
+        Configuracion.setLayout(ConfiguracionLayout);
+        ConfiguracionLayout.setHorizontalGroup(
+            ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfiguracionLayout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(688, Short.MAX_VALUE))
+        );
+        ConfiguracionLayout.setVerticalGroup(
+            ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfiguracionLayout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(281, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Configuración", Configuracion);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -505,14 +776,13 @@ public class Menu extends javax.swing.JFrame {
 
     private void CrearPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearPActionPerformed
        try {
-        // 1. Recolectar datos de la GUI
+        // Recolectar datos de la Interfaz
         String nombre = NombreProceso.getText().trim();
-        int numInstrucciones = (Integer) NInstrucciones.getValue(); // Si es un JSpinner
-        // Si NInstrucciones es un JTextField, sería: Integer.parseInt(NInstrucciones.getText());
+        int numInstrucciones = (Integer) NInstrucciones.getValue(); 
 
         String tipoSeleccionado = (String) TipoProceso.getSelectedItem();
         
-        // 2. Validar los datos de entrada
+        // Validar los datos de entrada
         if (nombre.isEmpty()) {
             JOptionPane.showMessageDialog(this, "El nombre del proceso no puede estar vacío.", "Error de Entrada", JOptionPane.ERROR_MESSAGE);
             return; // Detiene la creación del proceso
@@ -522,7 +792,7 @@ public class Menu extends javax.swing.JFrame {
             return;
         }
 
-        // 3. Crear el objeto Proceso
+        // Crear el objeto Proceso
         Proceso nuevoProceso;
 
         if ("I/O Bound".equals(tipoSeleccionado)) {
@@ -554,28 +824,27 @@ public class Menu extends javax.swing.JFrame {
                 Proceso.TipoProceso.CPU_BOUND
             );
         }
-        // cuando ya se tenga la clase CPU
-        // 4. Entregar el proceso al CPU
-        // if (miSimulador != null) {
-        //    miSimulador.agregarNuevoProceso(nuevoProceso);
+       
+        //  Entregar el proceso al CPU
+         if (miSimulador != null) {
+          miSimulador.agregarNuevoProceso(nuevoProceso);
         
-        // System.out.println("Proceso creado y añadido: " + nuevoProceso.toString());
+        System.out.println("Proceso creado y añadido: " + nuevoProceso.toString());
             // Opcional: Mostrar un mensaje de éxito
-        //    JOptionPane.showMessageDialog(this, "Proceso '" + nombre + "' creado exitosamente.", "Proceso Creado", JOptionPane.INFORMATION_MESSAGE);
-        // } else {
-        //     System.err.println("Error: La referencia al simulador es nula.");
-        //}
+           JOptionPane.showMessageDialog(this, "Proceso '" + nombre + "' creado exitosamente.", "Proceso Creado", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+             System.err.println("Error: La referencia al simulador es nula.");
+        }
 
-        // 5. (Opcional) Limpiar los campos para el siguiente proceso
+        // Limpiar los campos para el siguiente proceso
         NombreProceso.setText("");
         NInstrucciones.setValue(0);
         TipoProceso.setSelectedIndex(0);
         ciclosGenerarSpinner.setValue(0);
         ciclosSatisfacerSpinner.setValue(0);
 
-    } catch (NumberFormatException ex) {
-        // Este catch es útil si usas JTextField para los números
-        JOptionPane.showMessageDialog(this, "Por favor, ingrese valores numéricos válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+   
+        
     } catch (Exception ex) {
         // Captura cualquier otro error inesperado
         JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -584,7 +853,66 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_CrearPActionPerformed
 
     private void CrearPAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearPAutoActionPerformed
-        // TODO add your handling code here:
+     // Usamos la clase Random para generar números aleatorios.
+    java.util.Random random = new java.util.Random();
+    
+    for (int i = 1; i <= 10; i++) {
+        // ---  Generar Nombre y Número de Instrucciones ---
+        String nombre = "P-Auto-" + i;
+        
+        // Genera un número de instrucciones entre 10 y 50.
+        // random.nextInt(41) genera un número de 0 a 40. Le sumamos 10.
+        int numInstrucciones = random.nextInt(41) + 10; 
+
+        Proceso nuevoProceso;
+
+        // --- Decidir aleatoriamente si es CPU o I/O Bound (50/50) ---
+        if (random.nextBoolean()) {
+            // --- Crear un proceso I/O BOUND ---
+            
+            int ciclosParaGenerar;
+            int ciclosParaSatisfacer;
+
+            // Bucle 'do-while' para garantizar que la suma de ciclos de E/S no exceda las instrucciones totales.
+            do {
+                // Ciclos para generar la excepción: un número entre 2 y la mitad de las instrucciones.
+                // Mínimo 2 para que no sea en la primera instrucción.
+                ciclosParaGenerar = random.nextInt(numInstrucciones / 2) + 2;
+
+                // Ciclos para satisfacer la excepción: un número entre 3 y 15.
+                ciclosParaSatisfacer = random.nextInt(13) + 3;
+
+            } while (ciclosParaGenerar >= numInstrucciones); // Condición de seguridad por si numInstrucciones es muy bajo.
+
+            nuevoProceso = new Proceso(
+                nombre, 
+                numInstrucciones, 
+                Proceso.TipoProceso.IO_BOUND, 
+                ciclosParaGenerar, 
+                ciclosParaSatisfacer
+            );
+            System.out.println("Creado Proceso I/O Bound: " + nombre + " (Inst: " + numInstrucciones + ", Gen: " + ciclosParaGenerar + ", Sat: " + ciclosParaSatisfacer + ")");
+
+        } else {
+            // --- Crear un proceso CPU BOUND ---
+            
+            nuevoProceso = new Proceso(
+                nombre, 
+                numInstrucciones, 
+                Proceso.TipoProceso.CPU_BOUND
+            );
+            System.out.println("Creado Proceso CPU Bound: " + nombre + " (Inst: " + numInstrucciones + ")");
+        }
+
+        // --- 3. Entregar el proceso al simulador ---
+        if (miSimulador != null) {
+            miSimulador.agregarNuevoProceso(nuevoProceso);
+        }
+    }
+    
+    // Mensaje de confirmación para el usuario.
+    JOptionPane.showMessageDialog(this, "Se han generado y añadido 10 procesos automáticamente.", "Procesos Creados", JOptionPane.INFORMATION_MESSAGE);
+
     }//GEN-LAST:event_CrearPAutoActionPerformed
 
     private void TipoProcesoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_TipoProcesoItemStateChanged
@@ -616,12 +944,111 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_TipoProcesoItemStateChanged
 
     private void CambiarPoliticaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CambiarPoliticaActionPerformed
-        // TODO add your handling code here:
+                                           
+    
+                                                   
+    // 1. Obtener el nombre del algoritmo seleccionado en el JComboBox
+    String nombreAlgoritmo = (String) PoliticaPlanificacion.getSelectedItem();
+    
+    // 2. Crear la instancia del planificador correspondiente
+    EstrategiaPlanificacion nuevoPlanificador = null;
+    
+    switch (nombreAlgoritmo) {
+        case "FCFS":
+            nuevoPlanificador = new FCFS();
+            break;
+        case "HRRN":
+            nuevoPlanificador = new HRRN();
+            break;
+        case "MLFQ":
+            nuevoPlanificador = new MLFQ();
+            break;
+        case "RoundRobin":
+            nuevoPlanificador = new RoundRobin();
+            break;
+        case "SPN":
+            nuevoPlanificador = new SPN();
+            break;
+        case "SRT":
+            nuevoPlanificador = new SRT();
+            break;
+        default:
+            // Caso por si acaso algo sale mal
+            System.err.println("Algoritmo de planificación desconocido: " + nombreAlgoritmo);
+            return;
+    }
+    
+    // 3. Pasar el nuevo planificador al simulador
+    if (miSimulador != null && nuevoPlanificador != null) {
+        miSimulador.setPlanificador(nuevoPlanificador);
+        JOptionPane.showMessageDialog(this, "La política de planificación ha cambiado a " + nombreAlgoritmo, "Cambio Exitoso", JOptionPane.INFORMATION_MESSAGE);
+    }
+
     }//GEN-LAST:event_CambiarPoliticaActionPerformed
 
     private void IniciarPausarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarPausarButtonActionPerformed
-        // TODO add your handling code here:
+         // 1. Preguntarle al botón si está actualmente en estado "seleccionado".
+    // El clic acaba de cambiar su estado, así que si ahora está seleccionado,
+    // significa que el usuario acaba de INICIAR/REANUDAR.
+    if (IniciarPausarButton.isSelected()) {
+        // El botón ha sido PRESIONADO (estado "Iniciar/Reanudar")
+        miSimulador.iniciar();
+        IniciarPausarButton.setText("Pausar");
+        IndicadorActivo.setSelected(true); // Sincroniza el otro botón
+        IndicadorActivo.setBackground(java.awt.Color.GREEN);
+        
+    } else {
+        // Si no está seleccionado, significa que el usuario acaba de PAUSAR.
+        miSimulador.detener();
+        IniciarPausarButton.setText("Iniciar");
+        IndicadorActivo.setSelected(false); // Sincroniza el otro botón
+        IndicadorActivo.setBackground(java.awt.Color.RED);
+    }
+
     }//GEN-LAST:event_IniciarPausarButtonActionPerformed
+
+    private void IniciarPausarButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_IniciarPausarButtonItemStateChanged
+       
+        
+
+    }//GEN-LAST:event_IniciarPausarButtonItemStateChanged
+
+    private void IndicadorActivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IndicadorActivoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_IndicadorActivoActionPerformed
+
+    private void CambiarCicloRelojActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CambiarCicloRelojActionPerformed
+      try {
+        Object spinnerValue = DurCicloReloj.getValue();
+        Double duracionEnSegundos = (Double) spinnerValue;
+
+        long duracionEnMilisegundos = (long) (duracionEnSegundos * 1000.0);
+
+        if (duracionEnMilisegundos < 0) {
+            JOptionPane.showMessageDialog(this, "La duración del ciclo no puede ser negativa.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 1. Comunicar el cambio al simulador (esto no cambia)
+        if (miSimulador != null) {
+            miSimulador.setDuracionCiclo(duracionEnMilisegundos);
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: El simulador no está inicializado.", "Error Interno", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // 2. Actualizar el display INMEDIATAMENTE después de cambiar el valor.
+        // Ahora esta es la única vez que se actualiza el display de duración.
+        actualizarDisplayDuracionCiclo();
+
+        // 3. Mostrar un mensaje de confirmación (esto no cambia)
+        JOptionPane.showMessageDialog(this, "La duración del ciclo se ha actualizado a " + duracionEnSegundos + " segundos.", "Cambio Guardado", JOptionPane.INFORMATION_MESSAGE);
+
+    } catch (ClassCastException ex) {
+        JOptionPane.showMessageDialog(this, "Hubo un error al leer el valor de duración.", "Error de Tipo", JOptionPane.ERROR_MESSAGE);
+    }
+
+    }//GEN-LAST:event_CambiarCicloRelojActionPerformed
 
     /**
      * @param args the command line arguments
@@ -649,12 +1076,16 @@ public class Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton CambiarCicloReloj;
     private javax.swing.JButton CambiarPolitica;
     private javax.swing.JTextArea CicloActual;
     private javax.swing.JPanel Configuracion;
     private javax.swing.JButton CrearP;
     private javax.swing.JButton CrearPAuto;
-    private javax.swing.JPanel Estadisticas;
+    private javax.swing.JSpinner DurCicloReloj;
+    private javax.swing.JLabel DurCicloRelojAct;
+    private javax.swing.JPanel Estadísticas;
+    private javax.swing.JTabbedPane Graficos;
     private javax.swing.JToggleButton IndicadorActivo;
     private javax.swing.JToggleButton IniciarPausarButton;
     private javax.swing.JList<String> ListaBloqueado;
@@ -663,7 +1094,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JList<String> ListaNuevo;
     private javax.swing.JList<String> ListaSuspBloqueado;
     private javax.swing.JList<String> ListaSuspListo;
-    private javax.swing.JScrollPane ModoSistema;
     private javax.swing.JSpinner NInstrucciones;
     private javax.swing.JTextField NombreProceso;
     private javax.swing.JComboBox<String> PoliticaPlanificacion;
@@ -671,9 +1101,12 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> TipoProceso;
     private javax.swing.JSpinner ciclosGenerarSpinner;
     private javax.swing.JSpinner ciclosSatisfacerSpinner;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
@@ -684,16 +1117,21 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane17;
     private javax.swing.JScrollPane jScrollPane18;
-    private javax.swing.JScrollPane jScrollPane19;
     private javax.swing.JScrollPane jScrollPane20;
     private javax.swing.JScrollPane jScrollPane21;
     private javax.swing.JScrollPane jScrollPane22;

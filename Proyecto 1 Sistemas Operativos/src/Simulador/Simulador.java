@@ -1,3 +1,5 @@
+package Simulador;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -5,7 +7,7 @@
 import EstructuraDeDatos.Cola;
 import EstructuraDeDatos.Proceso;
 import Planificador.*; // Importa todas las clases de planificación
-import Simulador.Clock;
+
 
 /**
  * Núcleo del Sistema Operativo que orquesta la simulación completa.
@@ -22,7 +24,7 @@ public class Simulador implements Runnable {
     private static final int MEMORIA_MAXIMA_PROCESOS = 5;
 
     // --- Componentes del Sistema ---
-    private final Clock clock;
+    private Clock clock;
     private EstrategiaPlanificacion planificador;
     private Proceso procesoEnCPU;
 
@@ -72,6 +74,33 @@ public class Simulador implements Runnable {
         synchronized (colaNuevos) {
             colaNuevos.encolar(proceso);
         }
+    }
+    
+    /**
+    * Cambia la estrategia de planificación en tiempo de ejecución.
+    * TODO: En una versión avanzada, este método debería transferir de forma segura
+    * los procesos de la cola de listos del planificador antiguo al nuevo.
+    * Por ahora, simplemente reemplazará el planificador.
+    * @param nuevaEstrategia La nueva instancia del algoritmo de planificación.
+    */
+    public void setPlanificador(EstrategiaPlanificacion nuevaEstrategia) {
+    // Aquí es donde se manejaría la migración de procesos de la cola de listos.
+    // Para simplificar, asumiremos que cambiar el planificador vacía la cola de listos.
+    // Una implementación más robusta es más compleja.
+    this.planificador = nuevaEstrategia;
+    System.out.println("PLANIFICADOR CAMBIADO A: " + nuevaEstrategia.getNombre());
+    
+    }
+    
+    /**
+    * Permite a la GUI cambiar la duración de un ciclo de reloj en tiempo real.
+    * Delega la llamada al objeto Clock interno.
+     * @param milisegundos La nueva duración de un ciclo en milisegundos.
+    */
+    public void setDuracionCiclo(long milisegundos) {
+    if (this.clock != null) {
+        this.clock.setDuracionCicloMs(milisegundos);
+    }
     }
     
     // --- El Bucle Principal del Kernel ---
@@ -357,4 +386,12 @@ public class Simulador implements Runnable {
     public boolean isSistemaOperativoActivo() {
         return this.procesoEnCPU == null;
     }
+
+    /**
+     * @param clock the clock to set
+     */
+    public void setClock(Clock clock) {
+        this.clock = clock;
+    }
 }
+

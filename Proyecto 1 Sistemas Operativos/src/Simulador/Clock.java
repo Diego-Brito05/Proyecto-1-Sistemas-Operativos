@@ -20,10 +20,14 @@ public class Clock {
     // Usamos AtomicLong para el contador de ciclos para garantizar operaciones atómicas
     // si múltiples hilos necesitaran consultarlo o modificarlo
     private final AtomicLong cicloActual;
+    
+
+
 
     public Clock(long duracionInicialMs) {
         this.duracionCicloMs = duracionInicialMs;
         this.cicloActual = new AtomicLong(0);
+        
     }
 
     /**
@@ -46,7 +50,7 @@ public class Clock {
      * @return La duración del ciclo en ms.
      */
     public long getDuracionCicloMs() {
-        return duracionCicloMs;
+    return this.duracionCicloMs;
     }
 
     /**
@@ -55,9 +59,9 @@ public class Clock {
      * @param duracionCicloMs La nueva duración en ms.
      */
     public void setDuracionCicloMs(long duracionCicloMs) {
-        // Aseguramos que la duración no sea negativa.
-        this.duracionCicloMs = Math.max(0, duracionCicloMs);
-    }
+    // Math.max asegura que no se pueda establecer una duración negativa
+    this.duracionCicloMs = Math.max(0, duracionCicloMs);
+}
 
     /**
      * Pausa el hilo actual por la duración de un ciclo de reloj.
@@ -73,4 +77,8 @@ public class Clock {
         }
     }
 }
+
+
+
+
 
