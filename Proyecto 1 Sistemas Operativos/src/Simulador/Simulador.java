@@ -21,7 +21,7 @@ public class Simulador implements Runnable {
      * Límite simulado de memoria. Define cuántos procesos pueden estar en las colas
      * de Listos + Bloqueados al mismo tiempo. Si se supera, se activa la suspensión.
      */
-    private static final int MEMORIA_MAXIMA_PROCESOS = 5;
+    private static final int MEMORIA_MAXIMA_PROCESOS = 10;
 
     // --- Componentes del Sistema ---
     private Clock clock;
@@ -217,16 +217,48 @@ public class Simulador implements Runnable {
     // --- Lógica de Planificadores de Largo y Mediano Plazo ---
     
     private void admitirNuevosProcesos() {
+        // Procesamos todos los procesos que estén en la cola de Nuevos en este ciclo.
         while (!colaNuevos.estaVacia()) {
+            Proceso pNuevo = colaNuevos.verFrente(); // Solo miramos, no lo sacamos todavía
+
             if (hayMemoriaLibre()) {
-                Proceso p = colaNuevos.desencolar();
-                p.setEstado(Proceso.EstadoProceso.LISTO);
-                p.setTiempoLlegada(clock.getCicloActual());
-                planificador.agregarProceso(p);
-                System.out.println("MEMORIA | Proceso " + p.getId() + " admitido en memoria -> LISTO");
+                // --- Caso 1: Hay memoria libre, admitimos directamente ---
+                pNuevo = colaNuevos.desencolar();
+                pNuevo.setEstado(Proceso.EstadoProceso.LISTO);
+                pNuevo.setTiempoLlegada(clock.getCicloActual());
+                planificador.agregarProceso(pNuevo);
+                System.out.println("MEMORIA | Proceso " + pNuevo.getId() + " admitido en memoria -> LISTO");
+
             } else {
-                System.out.println("MEMORIA | Llena. No se pueden admitir nuevos procesos. Esperando...");
-                break; // No hay memoria, no podemos admitir más por ahora.
+                // --- Caso 2: No hay memoria. Intentamos hacer un SWAP-OUT ---
+                // Buscamos un candidato para suspender, dando prioridad a los bloqueados.
+                Proceso candidatoASuspender = buscarCandidatoParaSuspender();
+
+                if (candidatoASuspender != null) {
+                    // ¡Encontramos a alguien a quien suspender!
+                    pNuevo = colaNuevos.desencolar(); // Ahora sí admitimos el nuevo
+
+                    // Suspendemos al candidato
+                    if (candidatoASuspender.getEstado() == Proceso.EstadoProceso.BLOQUEADO) {
+                        System.out.println("SWAP-OUT | Memoria llena. Suspendiendo proceso BLOQUEADO " + candidatoASuspender.getId() + " para hacer espacio.");
+                        colaBloqueados.eliminar(candidatoASuspender); // Necesitarás un método 'eliminar' en tu Cola
+                        candidatoASuspender.setEstado(Proceso.EstadoProceso.SUSPENDIDO_BLOQUEADO);
+                        colaSuspendidosBloqueados.encolar(candidatoASuspender);
+
+                    } 
+
+                    
+                    pNuevo.setEstado(Proceso.EstadoProceso.LISTO);
+                    pNuevo.setTiempoLlegada(clock.getCicloActual());
+                    planificador.agregarProceso(pNuevo);
+                    System.out.println("MEMORIA | Proceso " + pNuevo.getId() + " admitido en memoria -> LISTO (gracias al swap-out)");
+
+                } else {
+                    // No pudimos suspender a nadie (ej. no hay bloqueados), así que el nuevo proceso espera.
+                    // Podrías moverlo a SUSPENDIDO_LISTO como antes, o simplemente dejarlo en NUEVO.
+                    System.out.println("MEMORIA | Llena y sin candidatos para suspender. Proceso " + pNuevo.getId() + " sigue esperando en la cola de Nuevos.");
+                    break; // Detenemos la admisión por este ciclo.
+                }
             }
         }
     }
@@ -298,6 +330,27 @@ public class Simulador implements Runnable {
             ((Proceso) obj).incrementarTiempoEspera();
         }
     }
+    
+    
+    /**
+    * Busca un proceso en memoria para ser suspendido (swapped-out).
+    * Política simple: da prioridad a los procesos en estado BLOQUEADO.
+    * @return El proceso candidato a ser suspendido, o null si no se encuentra ninguno.
+    */
+   private Proceso buscarCandidatoParaSuspender() {
+       // Primero, buscamos en la cola de bloqueados. Son los mejores candidatos
+       // porque no están compitiendo por la CPU en este momento.
+       if (!colaBloqueados.estaVacia()) {
+           // Devolvemos el primer proceso bloqueado. Una política más compleja
+           // podría buscar el que lleva más tiempo bloqueado, o el de menor prioridad.
+           return colaBloqueados.verFrente();
+       }
+
+       // Si no hay procesos bloqueados, podríamos buscar en la cola de listos.
+       // Por ejemplo, podríamos suspender al proceso con la prioridad más baja en la cola de listos.
+       // Por ahora, para mantenerlo simple, no suspenderemos procesos listos.
+       return null; 
+   }
     
     
     // MÉTODO DE CREACIÓN DE PROCESO CENTRALIZADA ---

@@ -50,6 +50,58 @@ public class Cola<T> {
             return dato;
         }
     }
+    
+    
+     /**
+     * Busca y elimina la primera ocurrencia de un elemento específico de la cola.
+     * Esta es una funcionalidad extendida, no típica de una cola FIFO estricta,
+     * pero necesaria para que el planificador de mediano plazo pueda suspender
+     * un proceso bloqueado específico.
+     *
+     * @param dato El dato a eliminar.
+     * @return true si el elemento fue encontrado y eliminado, false en caso contrario.
+     */
+    public boolean eliminar(T dato) {
+        synchronized (bloqueoCola) {
+            if (estaVacia()) {
+                return false;
+            }
+
+            // Caso 1: El elemento a eliminar es el primero (el frente).
+            // Podemos simplemente usar el método desencolar.
+            if (frente.getDato().equals(dato)) {
+                desencolar(); // Este método ya maneja la actualización de 'frente' y 'tamano'.
+                return true;
+            }
+
+            // Caso 2: El elemento está en medio o al final de la cola.
+            Nodo<T> previo = frente;
+            Nodo<T> actual = frente.getSiguiente();
+
+            while (actual != null) {
+                if (actual.getDato().equals(dato)) {
+                    // Encontramos el nodo. Enlazamos el nodo previo con el siguiente.
+                    previo.setSiguiente(actual.getSiguiente());
+
+                    // Si el nodo que eliminamos era el último (el final de la cola),
+                    // debemos actualizar la referencia 'finalCola' para que apunte al nodo previo.
+                    if (actual == finalCola) {
+                        finalCola = previo;
+                    }
+
+                    tamano--; // Decrementamos el tamaño.
+                    return true; // Éxito.
+                }
+                
+                // Avanzamos en la búsqueda.
+                previo = actual;
+                actual = actual.getSiguiente();
+            }
+
+            return false; // El elemento no se encontró en la cola.
+        }
+    }
+
 
     public T verFrente() {
         synchronized (bloqueoCola) {
