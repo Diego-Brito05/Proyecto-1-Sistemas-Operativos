@@ -28,6 +28,7 @@ public class Simulador implements Runnable {
     private EstrategiaPlanificacion planificador;
     private Proceso procesoEnCPU;
     
+    private final Cola<String> colaDeLogs;
     // VARIABLE PARA GESTIÓN DE MEMORIA SIMULADA
     private int proximaDireccionMemoria = 1024;
 
@@ -50,6 +51,8 @@ public class Simulador implements Runnable {
     public Simulador() {
         this.clock = new Clock(1000);
         this.planificador = new FCFS(); // Inicia con FCFS por defecto
+        
+        this.colaDeLogs = new Cola<>();
         
         this.colaNuevos = new Cola<>();
         this.colaBloqueados = new Cola<>();
@@ -114,34 +117,23 @@ public class Simulador implements Runnable {
     }
     
     // --- El Bucle Principal del Kernel ---
-    @Override
+     @Override
     public void run() {
         while (enEjecucion) {
             clock.tick();
-            System.out.println("\n----- CICLO #" + clock.getCicloActual() + " | Planificador: " + planificador.getNombre() + " -----");
+            log("\n----- CICLO #" + clock.getCicloActual() + " | Planificador: " + planificador.getNombre() + " -----"); 
 
-            // --- PLANIFICADOR DE MEDIANO PLAZO (Gestión de E/S y Suspensión) ---
-            // 1. Gestionar E/S de procesos en memoria (Bloqueados -> Listos/SuspendidosListos)
             gestionarColaBloqueados();
-            // 2. Gestionar E/S de procesos suspendidos (SuspendidosBloqueados -> SuspendidosListos)
             gestionarColaSuspendidosBloqueados();
-            // 3. Intentar reanudar procesos si hay memoria libre (SuspendidosListos -> Listos)
             reanudarProcesosSuspendidos();
-
-            // --- PLANIFICADOR DE LARGO PLAZO (Admisión de nuevos procesos) ---
-            // 4. Intentar admitir procesos de la cola de Nuevos al sistema
             admitirNuevosProcesos();
             
-            // 5. Para HRRN: Actualizar tiempo de espera de procesos en la cola de Listos
             if (planificador instanceof HRRN) {
                 actualizarTiemposDeEspera();
             }
 
-            // --- PLANIFICADOR DE CORTO PLAZO (Gestión de la CPU) ---
-            // 6. Verificar si es necesaria una expropiación (para SRT)
             verificarExpropiacionSRT();
             
-            // 7. Si la CPU está libre, despachar un nuevo proceso
             if (procesoEnCPU == null) {
                 procesoEnCPU = planificador.getSiguienteProceso();
                 if (procesoEnCPU != null) {
@@ -149,31 +141,29 @@ public class Simulador implements Runnable {
                 }
             }
 
-            // 8. Ejecutar ciclo de CPU si hay un proceso
             if (procesoEnCPU != null) {
                 ejecutarCicloCPU();
             } else {
-                System.out.println("CPU OCIOSA.");
+                log("CPU OCIOSA."); 
             }
             
             clock.esperar();
         }
-        System.out.println("Simulación detenida.");
+        log("Simulación detenida."); 
     }
     
     private void ejecutarCicloCPU() {
-        System.out.println("CPU | Ejecutando: " + procesoEnCPU.getId() + " (" + procesoEnCPU.getNombre() + "), PC=" + procesoEnCPU.getProgramCounter());
+        log("CPU | Ejecutando: " + procesoEnCPU.getId() + " (" + procesoEnCPU.getNombre() + "), PC=" + procesoEnCPU.getProgramCounter()); 
         procesoEnCPU.ejecutarInstruccion();
         quantumRestante--;
 
-        // --- Verificación de Eventos post-ejecución ---
         if (procesoEnCPU.haTerminado()) {
-            System.out.println("EVENTO | Proceso " + procesoEnCPU.getId() + " ha TERMINADO.");
+            log("EVENTO | Proceso " + procesoEnCPU.getId() + " ha TERMINADO."); 
             procesoEnCPU.setEstado(Proceso.EstadoProceso.TERMINADO);
             colaTerminados.encolar(procesoEnCPU);
             procesoEnCPU = null;
         } else if (procesoEnCPU.necesitaExcepcionIO()) {
-            System.out.println("EVENTO | Proceso " + procesoEnCPU.getId() + " solicita E/S -> BLOQUEADO");
+            log("EVENTO | Proceso " + procesoEnCPU.getId() + " solicita E/S -> BLOQUEADO"); 
             procesoEnCPU.setEstado(Proceso.EstadoProceso.BLOQUEADO);
             procesoEnCPU.setCiclosEsperaIO(procesoEnCPU.getCiclosExcepcionCompletada());
             colaBloqueados.encolar(procesoEnCPU);
@@ -184,119 +174,117 @@ public class Simulador implements Runnable {
     }
 
     private void configurarProcesoParaEjecucion(Proceso p) {
-        System.out.println("SCHEDULER | Despachando Proceso " + p.getId() + " a la CPU.");
+        log("SCHEDULER | Despachando Proceso " + p.getId() + " a la CPU."); 
         p.setEstado(Proceso.EstadoProceso.EJECUCION);
         
-        // Configurar quantum según el planificador
-        if (planificador instanceof RoundRobin) {
-            quantumRestante = quantum;
-        } else if (planificador instanceof MLFQ) {
-            // Quantum depende del nivel, aquí simplificamos con el valor base
-            // Una implementación más avanzada leería el nivel del proceso desde p.getNivelMLFQ()
+        if (planificador instanceof RoundRobin || planificador instanceof MLFQ) {
             quantumRestante = quantum; 
         }
     }
     
     private void manejarFinDeQuantum() {
-        System.out.println("EVENTO | Proceso " + procesoEnCPU.getId() + " - Fin de Quantum.");
+        log("EVENTO | Proceso " + procesoEnCPU.getId() + " - Fin de Quantum.");
         procesoEnCPU.setEstado(Proceso.EstadoProceso.LISTO);
         
         if (planificador instanceof MLFQ) {
-            // Lógica de degradación para MLFQ
             MLFQ mlfqScheduler = (MLFQ) planificador;
-            int nivelActual = procesoEnCPU.getNivelMLFQ(); // Necesitas añadir este campo en Proceso.java
+            int nivelActual = procesoEnCPU.getNivelMLFQ();
             mlfqScheduler.degradarProceso(procesoEnCPU, nivelActual);
-            procesoEnCPU.setNivelMLFQ(Math.min(nivelActual + 1, 2)); // Suponiendo 3 niveles (0, 1, 2)
+            procesoEnCPU.setNivelMLFQ(Math.min(nivelActual + 1, 2));
         } else {
-            // Lógica estándar para Round Robin
             planificador.agregarProceso(procesoEnCPU);
         }
         procesoEnCPU = null;
     }
     
-    // --- Lógica de Planificadores de Largo y Mediano Plazo ---
-    
     private void admitirNuevosProcesos() {
-        // Procesamos todos los procesos que estén en la cola de Nuevos en este ciclo.
         while (!colaNuevos.estaVacia()) {
-            Proceso pNuevo = colaNuevos.verFrente(); // Solo miramos, no lo sacamos todavía
+            Proceso pNuevo = colaNuevos.verFrente();
 
             if (hayMemoriaLibre()) {
-                // --- Caso 1: Hay memoria libre, admitimos directamente ---
                 pNuevo = colaNuevos.desencolar();
                 pNuevo.setEstado(Proceso.EstadoProceso.LISTO);
                 pNuevo.setTiempoLlegada(clock.getCicloActual());
                 planificador.agregarProceso(pNuevo);
-                System.out.println("MEMORIA | Proceso " + pNuevo.getId() + " admitido en memoria -> LISTO");
-
+                log("MEMORIA | Proceso " + pNuevo.getId() + " admitido en memoria -> LISTO"); 
             } else {
-                // --- Caso 2: No hay memoria. Intentamos hacer un SWAP-OUT ---
-                // Buscamos un candidato para suspender, dando prioridad a los bloqueados.
                 Proceso candidatoASuspender = buscarCandidatoParaSuspender();
-
                 if (candidatoASuspender != null) {
-                    // ¡Encontramos a alguien a quien suspender!
-                    pNuevo = colaNuevos.desencolar(); // Ahora sí admitimos el nuevo
-
-                    // Suspendemos al candidato
+                    pNuevo = colaNuevos.desencolar();
                     if (candidatoASuspender.getEstado() == Proceso.EstadoProceso.BLOQUEADO) {
-                        System.out.println("SWAP-OUT | Memoria llena. Suspendiendo proceso BLOQUEADO " + candidatoASuspender.getId() + " para hacer espacio.");
-                        colaBloqueados.eliminar(candidatoASuspender); // Necesitarás un método 'eliminar' en tu Cola
+                        log("SWAP-OUT | Memoria llena. Suspendiendo proceso BLOQUEADO " + candidatoASuspender.getId() + " para hacer espacio."); 
+                        colaBloqueados.eliminar(candidatoASuspender);
                         candidatoASuspender.setEstado(Proceso.EstadoProceso.SUSPENDIDO_BLOQUEADO);
                         colaSuspendidosBloqueados.encolar(candidatoASuspender);
-
                     } 
-
-                    
                     pNuevo.setEstado(Proceso.EstadoProceso.LISTO);
                     pNuevo.setTiempoLlegada(clock.getCicloActual());
                     planificador.agregarProceso(pNuevo);
-                    System.out.println("MEMORIA | Proceso " + pNuevo.getId() + " admitido en memoria -> LISTO (gracias al swap-out)");
-
+                    log("MEMORIA | Proceso " + pNuevo.getId() + " admitido en memoria -> LISTO (gracias al swap-out)"); // <<-- CAMBIO
                 } else {
-                    // No pudimos suspender a nadie (ej. no hay bloqueados), así que el nuevo proceso espera.
-                    // Podrías moverlo a SUSPENDIDO_LISTO como antes, o simplemente dejarlo en NUEVO.
-                    System.out.println("MEMORIA | Llena y sin candidatos para suspender. Proceso " + pNuevo.getId() + " sigue esperando en la cola de Nuevos.");
-                    break; // Detenemos la admisión por este ciclo.
+                    log("MEMORIA | Llena y sin candidatos para suspender. Proceso " + pNuevo.getId() + " sigue esperando en la cola de Nuevos."); 
+                    break;
                 }
             }
         }
     }
 
     private void gestionarColaBloqueados() {
-        int tamano = colaBloqueados.getTamano();
-        for (int i = 0; i < tamano; i++) {
+        // Usamos una cola temporal para los procesos que aún no han terminado su E/S.
+        Cola<Proceso> tempCola = new Cola<>();
+
+        // Procesamos cada proceso en la cola de bloqueados.
+        while (!colaBloqueados.estaVacia()) {
             Proceso p = colaBloqueados.desencolar();
             p.decrementarCicloEsperaIO();
+
             if (p.getCiclosEsperaIO() <= 0) {
-                System.out.println("E/S | Proceso " + p.getId() + " completó E/S.");
+                // El proceso terminó su E/S, lo movemos a su siguiente estado.
+                log("E/S | Proceso " + p.getId() + " completó E/S.");
                 if (hayMemoriaLibre()) {
                     p.setEstado(Proceso.EstadoProceso.LISTO);
                     planificador.agregarProceso(p);
-                    System.out.println("MEMORIA | Proceso " + p.getId() + " vuelve a -> LISTO");
+                    log("MEMORIA | Proceso " + p.getId() + " vuelve a -> LISTO");
                 } else {
                     p.setEstado(Proceso.EstadoProceso.SUSPENDIDO_LISTO);
                     colaSuspendidosListos.encolar(p);
-                    System.out.println("MEMORIA | Llena. Proceso " + p.getId() + " va a -> SUSPENDIDO_LISTO");
+                    log("MEMORIA | Llena. Proceso " + p.getId() + " va a -> SUSPENDIDO_LISTO");
                 }
             } else {
-                colaBloqueados.encolar(p); // Sigue esperando
+                // El proceso aún necesita esperar, lo ponemos en la cola temporal.
+                tempCola.encolar(p);
             }
+        }
+
+        // Al final, re-encolamos todos los procesos que aún están esperando.
+        // Esto evita modificar la cola mientras la recorremos.
+        while (!tempCola.estaVacia()) {
+            colaBloqueados.encolar(tempCola.desencolar());
         }
     }
 
     private void gestionarColaSuspendidosBloqueados() {
-        int tamano = colaSuspendidosBloqueados.getTamano();
-        for (int i = 0; i < tamano; i++) {
+        // Misma lógica con una cola temporal.
+        Cola<Proceso> tempCola = new Cola<>();
+
+        while (!colaSuspendidosBloqueados.estaVacia()) {
             Proceso p = colaSuspendidosBloqueados.desencolar();
             p.decrementarCicloEsperaIO();
+
             if (p.getCiclosEsperaIO() <= 0) {
+                // El proceso terminó su E/S, se mueve a Suspendido Listo.
                 p.setEstado(Proceso.EstadoProceso.SUSPENDIDO_LISTO);
                 colaSuspendidosListos.encolar(p);
-                System.out.println("E/S | Proceso suspendido " + p.getId() + " completó E/S -> SUSPENDIDO_LISTO");
+                log("E/S | Proceso suspendido " + p.getId() + " completó E/S -> SUSPENDIDO_LISTO");
             } else {
-                colaSuspendidosBloqueados.encolar(p); // Sigue esperando
+                // Aún esperando, va a la cola temporal.
+                tempCola.encolar(p);
             }
+        }
+
+        // Devolvemos los procesos que siguen esperando a la cola original.
+        while (!tempCola.estaVacia()) {
+            colaSuspendidosBloqueados.encolar(tempCola.desencolar());
         }
     }
 
@@ -305,21 +293,19 @@ public class Simulador implements Runnable {
             Proceso p = colaSuspendidosListos.desencolar();
             p.setEstado(Proceso.EstadoProceso.LISTO);
             planificador.agregarProceso(p);
-            System.out.println("SWAP-IN | Proceso " + p.getId() + " reanudado -> LISTO");
+            log("SWAP-IN | Proceso " + p.getId() + " reanudado -> LISTO"); // 
         }
     }
-    
-    // --- Lógica Específica de Planificadores ---
     
     private void verificarExpropiacionSRT() {
         if (planificador instanceof SRT && procesoEnCPU != null) {
             Proceso mejorCandidato = planificador.peekSiguienteProceso();
             if (mejorCandidato != null && mejorCandidato.getRafagaRestante() < procesoEnCPU.getRafagaRestante()) {
-                System.out.println("EXPROPIACIÓN | Proceso entrante " + mejorCandidato.getId() + " (RT=" + mejorCandidato.getRafagaRestante() + 
-                                   ") es más corto que el actual " + procesoEnCPU.getId() + " (RT=" + procesoEnCPU.getRafagaRestante() + ").");
+                log("EXPROPIACIÓN | Proceso entrante " + mejorCandidato.getId() + " (RT=" + mejorCandidato.getRafagaRestante() + 
+                                   ") es más corto que el actual " + procesoEnCPU.getId() + " (RT=" + procesoEnCPU.getRafagaRestante() + ")."); 
                 procesoEnCPU.setEstado(Proceso.EstadoProceso.LISTO);
                 planificador.agregarProceso(procesoEnCPU);
-                procesoEnCPU = null; // Liberar la CPU para que el despachador elija al nuevo, más corto
+                procesoEnCPU = null;
             }
         }
     }
@@ -388,6 +374,11 @@ public class Simulador implements Runnable {
         return procesosEnMemoria < MEMORIA_MAXIMA_PROCESOS;
     }
     
+    private void log(String mensaje) {
+    System.out.println(mensaje);
+    colaDeLogs.encolar(mensaje);
+    }
+    
    // --- GETTERS PARA LA INTERFAZ GRÁFICA  ---
     // Estos métodos son 'thread-safe' porque devuelven copias de los datos,
     // no las referencias a las colas originales.
@@ -399,6 +390,11 @@ public class Simulador implements Runnable {
      */
     public Proceso getProcesoEnCPU() {
         return this.procesoEnCPU;
+    }
+    
+    
+     public Cola<String> getColaDeLogs() {
+        return this.colaDeLogs;
     }
 
     /**
