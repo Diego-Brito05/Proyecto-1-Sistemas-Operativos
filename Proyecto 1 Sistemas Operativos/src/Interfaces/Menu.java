@@ -16,6 +16,7 @@ import Planificador.SRT;
 import Simulador.Simulador;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import Simulador.Estadisticas;
 
 /**
  *
@@ -31,6 +32,7 @@ import javax.swing.JOptionPane;
     
     private Simulador miSimulador;
     private javax.swing.Timer guiUpdateTimer;
+    private Estadisticas stats;
     private int autoProcessCounter = 1;
     
 
@@ -40,7 +42,10 @@ import javax.swing.JOptionPane;
 
         
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        stats = new Estadisticas();
+        stats.Menu=this;
         miSimulador = new Simulador();
+        miSimulador.stats = stats;
         configurarEstadoInicial();
         
         
@@ -135,6 +140,70 @@ import javax.swing.JOptionPane;
         }
     }
     
+    public void actualizarEstadisticas(int finalizados, int IObound, int CPUbound, long ciclos, double throughtput, long cpu) {
+        this.Ciclos.setText(String.valueOf(ciclos));
+        this.ProcesosIO.setText(String.valueOf(IObound));
+        this.ProcesosCPU.setText(String.valueOf(CPUbound));
+        this.ProcesosTerminados.setText(String.valueOf(finalizados));
+        this.Throughtput.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.UsoCPU.setText(String.valueOf(cpu)+"%");
+    }
+    
+    public void actualizarFCFS(int finalizados, int IObound, int CPUbound, long ciclos, double throughtput, long cpu) {
+        this.FSFC_1.setText(String.valueOf(finalizados));
+        this.FSFC_2.setText(String.valueOf(IObound));
+        this.FSFC_3.setText(String.valueOf(CPUbound));
+        this.FSFC_5.setText(String.valueOf(ciclos));
+        this.FSFC_4.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.FSFC_6.setText(String.valueOf(cpu)+"%");
+    }
+    
+    public void actualizarHRRN(int finalizados, int IObound, int CPUbound, long ciclos, double throughtput, long cpu) {
+        this.HRRN_1.setText(String.valueOf(finalizados));
+        this.HRRN_2.setText(String.valueOf(IObound));
+        this.HRRN_3.setText(String.valueOf(CPUbound));
+        this.HRRN_5.setText(String.valueOf(ciclos));
+        this.HRRN_4.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.HRRN_6.setText(String.valueOf(cpu)+"%");
+    }
+    
+    public void actualizarMLFQ(int finalizados, int IObound, int CPUbound, long ciclos, double throughtput, long cpu) {
+        this.MLFQ_1.setText(String.valueOf(finalizados));
+        this.MLFQ_2.setText(String.valueOf(IObound));
+        this.MLFQ_3.setText(String.valueOf(CPUbound));
+        this.MLFQ_5.setText(String.valueOf(ciclos));
+        this.MLFQ_4.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.MLFQ_6.setText(String.valueOf(cpu)+"%");
+    }
+    
+    public void actualizarSPN(int finalizados, int IObound, int CPUbound, long ciclos, double throughtput, long cpu) {
+        this.SPN_1.setText(String.valueOf(finalizados));
+        this.SPN_2.setText(String.valueOf(IObound));
+        this.SPN_3.setText(String.valueOf(CPUbound));
+        this.SPN_5.setText(String.valueOf(ciclos));
+        this.SPN_4.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.SPN_6.setText(String.valueOf(cpu)+"%");
+    }
+    
+    public void actualizarSRT(int finalizados, int IObound, int CPUbound, long ciclos, double throughtput, long cpu) {
+        this.SRT_1.setText(String.valueOf(finalizados));
+        this.SRT_2.setText(String.valueOf(IObound));
+        this.SRT_3.setText(String.valueOf(CPUbound));
+        this.SRT_5.setText(String.valueOf(ciclos));
+        this.SRT_4.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.SRT_6.setText(String.valueOf(cpu)+"%");
+    }
+    
+    public void actualizarRR(int finalizados, int IObound, int CPUbound, long ciclos, double throughtput, long cpu) {
+        this.RR_1.setText(String.valueOf(finalizados));
+        this.RR_2.setText(String.valueOf(IObound));
+        this.RR_3.setText(String.valueOf(CPUbound));
+        this.RR_5.setText(String.valueOf(ciclos));
+        this.RR_4.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.RR_6.setText(String.valueOf(cpu)+"%");
+    }
+    
+    
     private void actualizarLog() {
     // Obtenemos la referencia a la cola de logs del simulador
     Cola<String> logs = miSimulador.getColaDeLogs();
@@ -151,6 +220,8 @@ import javax.swing.JOptionPane;
     // --- Auto-scroll ---
     // Hacemos que el JTextArea siempre muestre la última línea añadida
     enEjec.setCaretPosition(enEjec.getDocument().getLength());
+    
+    
 }
     
     
@@ -239,6 +310,12 @@ import javax.swing.JOptionPane;
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
+        ProcesosTerminados = new javax.swing.JLabel();
+        ProcesosIO = new javax.swing.JLabel();
+        ProcesosCPU = new javax.swing.JLabel();
+        Ciclos = new javax.swing.JLabel();
+        Throughtput = new javax.swing.JLabel();
+        UsoCPU = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -281,6 +358,42 @@ import javax.swing.JOptionPane;
         jLabel69 = new javax.swing.JLabel();
         jLabel70 = new javax.swing.JLabel();
         jLabel71 = new javax.swing.JLabel();
+        FSFC_1 = new javax.swing.JLabel();
+        FSFC_2 = new javax.swing.JLabel();
+        FSFC_3 = new javax.swing.JLabel();
+        FSFC_4 = new javax.swing.JLabel();
+        FSFC_5 = new javax.swing.JLabel();
+        FSFC_6 = new javax.swing.JLabel();
+        SRT_1 = new javax.swing.JLabel();
+        SRT_2 = new javax.swing.JLabel();
+        SRT_3 = new javax.swing.JLabel();
+        SRT_4 = new javax.swing.JLabel();
+        SRT_5 = new javax.swing.JLabel();
+        SRT_6 = new javax.swing.JLabel();
+        RR_1 = new javax.swing.JLabel();
+        RR_2 = new javax.swing.JLabel();
+        RR_3 = new javax.swing.JLabel();
+        RR_4 = new javax.swing.JLabel();
+        RR_5 = new javax.swing.JLabel();
+        RR_6 = new javax.swing.JLabel();
+        HRRN_1 = new javax.swing.JLabel();
+        HRRN_2 = new javax.swing.JLabel();
+        HRRN_3 = new javax.swing.JLabel();
+        HRRN_4 = new javax.swing.JLabel();
+        HRRN_5 = new javax.swing.JLabel();
+        HRRN_6 = new javax.swing.JLabel();
+        SPN_1 = new javax.swing.JLabel();
+        SPN_2 = new javax.swing.JLabel();
+        SPN_3 = new javax.swing.JLabel();
+        SPN_4 = new javax.swing.JLabel();
+        SPN_5 = new javax.swing.JLabel();
+        SPN_6 = new javax.swing.JLabel();
+        MLFQ_1 = new javax.swing.JLabel();
+        MLFQ_2 = new javax.swing.JLabel();
+        MLFQ_3 = new javax.swing.JLabel();
+        MLFQ_4 = new javax.swing.JLabel();
+        MLFQ_5 = new javax.swing.JLabel();
+        MLFQ_6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -480,7 +593,7 @@ import javax.swing.JOptionPane;
                     .addComponent(jLabel44, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(PoliticaPlanificacion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(CambiarPolitica, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(330, Short.MAX_VALUE))
+                .addContainerGap(347, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -754,7 +867,7 @@ import javax.swing.JOptionPane;
                 .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(1212, Short.MAX_VALUE))
+                .addContainerGap(1215, Short.MAX_VALUE))
         );
         ConfiguracionLayout.setVerticalGroup(
             ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -774,20 +887,20 @@ import javax.swing.JOptionPane;
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1745, Short.MAX_VALUE)
+            .addGap(0, 1756, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 738, Short.MAX_VALUE)
         );
 
-        Graficos.addTab("Comparación Throughpouts", jPanel2);
+        Graficos.addTab("Comparación Throughputs", jPanel2);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1745, Short.MAX_VALUE)
+            .addGap(0, 1756, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -800,7 +913,7 @@ import javax.swing.JOptionPane;
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1745, Short.MAX_VALUE)
+            .addGap(0, 1756, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -826,9 +939,27 @@ import javax.swing.JOptionPane;
 
         jLabel9.setText("Ciclo actual:");
 
-        jLabel10.setText("Throughtpout general:");
+        jLabel10.setText("Throughtput general:");
 
         jLabel21.setText("Utilización del CPU general:");
+
+        ProcesosTerminados.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        ProcesosTerminados.setText("0");
+
+        ProcesosIO.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        ProcesosIO.setText("0");
+
+        ProcesosCPU.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        ProcesosCPU.setText("0");
+
+        Ciclos.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        Ciclos.setText("0");
+
+        Throughtput.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        Throughtput.setText("0.0 Procesos/Ciclos");
+
+        UsoCPU.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        UsoCPU.setText("0%");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -837,19 +968,39 @@ import javax.swing.JOptionPane;
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(71, 71, 71)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)))
-                        .addGap(202, 202, 202)
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(ProcesosIO, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+                                    .addComponent(ProcesosCPU, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(ProcesosTerminados, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 512, Short.MAX_VALUE)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel21))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel7Layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(Ciclos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jLabel21))
+                                .addGap(18, 18, 18)
+                                .addComponent(UsoCPU, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addGap(18, 18, 18)
+                                .addComponent(Throughtput, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(612, Short.MAX_VALUE))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -859,15 +1010,21 @@ import javax.swing.JOptionPane;
                 .addGap(27, 27, 27)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel9))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel9)
+                    .addComponent(ProcesosTerminados)
+                    .addComponent(Ciclos))
+                .addGap(28, 28, 28)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel10))
+                    .addComponent(jLabel10)
+                    .addComponent(ProcesosIO)
+                    .addComponent(Throughtput))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jLabel21))
+                    .addComponent(jLabel21)
+                    .addComponent(ProcesosCPU)
+                    .addComponent(UsoCPU))
                 .addContainerGap(73, Short.MAX_VALUE))
         );
 
@@ -891,7 +1048,7 @@ import javax.swing.JOptionPane;
 
         jLabel17.setText("Procesos totales ejecutados durante política:");
 
-        jLabel18.setText("Throughtpout durante la política:");
+        jLabel18.setText("Throughtput durante la política:");
 
         jLabel19.setText("Procesos I/O Bound ejecutados durante política:");
 
@@ -901,7 +1058,7 @@ import javax.swing.JOptionPane;
 
         jLabel23.setText("Procesos totales ejecutados durante política:");
 
-        jLabel24.setText("Throughtpout durante la política:");
+        jLabel24.setText("Throughtput durante la política:");
 
         jLabel25.setText("Procesos I/O Bound ejecutados durante política:");
 
@@ -911,7 +1068,7 @@ import javax.swing.JOptionPane;
 
         jLabel46.setText("Procesos totales ejecutados durante política:");
 
-        jLabel47.setText("Throughtpout durante la política:");
+        jLabel47.setText("Throughtput durante la política:");
 
         jLabel48.setText("Procesos I/O Bound ejecutados durante política:");
 
@@ -921,7 +1078,7 @@ import javax.swing.JOptionPane;
 
         jLabel51.setText("Procesos totales ejecutados durante política:");
 
-        jLabel52.setText("Throughtpout durante la política:");
+        jLabel52.setText("Throughtput durante la política:");
 
         jLabel53.setText("Procesos I/O Bound ejecutados durante política:");
 
@@ -931,7 +1088,7 @@ import javax.swing.JOptionPane;
 
         jLabel56.setText("Procesos totales ejecutados durante política:");
 
-        jLabel57.setText("Throughtpout durante la política:");
+        jLabel57.setText("Throughtput durante la política:");
 
         jLabel58.setText("Procesos I/O Bound ejecutados durante política:");
 
@@ -941,7 +1098,7 @@ import javax.swing.JOptionPane;
 
         jLabel61.setText("Procesos totales ejecutados durante política:");
 
-        jLabel62.setText("Throughtpout durante la política:");
+        jLabel62.setText("Throughtput durante la política:");
 
         jLabel63.setText("Procesos I/O Bound ejecutados durante política:");
 
@@ -961,6 +1118,114 @@ import javax.swing.JOptionPane;
 
         jLabel71.setText("Utilización del CPU durante la política:");
 
+        FSFC_1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        FSFC_1.setText("0");
+
+        FSFC_2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        FSFC_2.setText("0");
+
+        FSFC_3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        FSFC_3.setText("0");
+
+        FSFC_4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        FSFC_4.setText("0.0 Procesos/Ciclos");
+
+        FSFC_5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        FSFC_5.setText("0");
+
+        FSFC_6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        FSFC_6.setText("0%");
+
+        SRT_1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SRT_1.setText("0");
+
+        SRT_2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SRT_2.setText("0");
+
+        SRT_3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SRT_3.setText("0");
+
+        SRT_4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SRT_4.setText("0.0 Procesos/Ciclos");
+
+        SRT_5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SRT_5.setText("0");
+
+        SRT_6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SRT_6.setText("0%");
+
+        RR_1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        RR_1.setText("0");
+
+        RR_2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        RR_2.setText("0");
+
+        RR_3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        RR_3.setText("0");
+
+        RR_4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        RR_4.setText("0.0 Procesos/Ciclos");
+
+        RR_5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        RR_5.setText("0");
+
+        RR_6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        RR_6.setText("0%");
+
+        HRRN_1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        HRRN_1.setText("0");
+
+        HRRN_2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        HRRN_2.setText("0");
+
+        HRRN_3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        HRRN_3.setText("0");
+
+        HRRN_4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        HRRN_4.setText("0.0 Procesos/Ciclos");
+
+        HRRN_5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        HRRN_5.setText("0");
+
+        HRRN_6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        HRRN_6.setText("0%");
+
+        SPN_1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SPN_1.setText("0");
+
+        SPN_2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SPN_2.setText("0");
+
+        SPN_3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SPN_3.setText("0");
+
+        SPN_4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SPN_4.setText("0.0 Procesos/Ciclos");
+
+        SPN_5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SPN_5.setText("0");
+
+        SPN_6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SPN_6.setText("0%");
+
+        MLFQ_1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        MLFQ_1.setText("0");
+
+        MLFQ_2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        MLFQ_2.setText("0");
+
+        MLFQ_3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        MLFQ_3.setText("0");
+
+        MLFQ_4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        MLFQ_4.setText("0.0 Procesos/Ciclos");
+
+        MLFQ_5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        MLFQ_5.setText("0");
+
+        MLFQ_6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        MLFQ_6.setText("0%");
+
         javax.swing.GroupLayout EstadísticasLayout = new javax.swing.GroupLayout(Estadísticas);
         Estadísticas.setLayout(EstadísticasLayout);
         EstadísticasLayout.setHorizontalGroup(
@@ -970,61 +1235,170 @@ import javax.swing.JOptionPane;
                 .addGap(85, 85, 85)
                 .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(EstadísticasLayout.createSequentialGroup()
-                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel17)
-                            .addComponent(jLabel22)
-                            .addComponent(jLabel20)
-                            .addComponent(jLabel19)
-                            .addComponent(jLabel18)
-                            .addComponent(jLabel61)
-                            .addComponent(jLabel65)
-                            .addComponent(jLabel64)
-                            .addComponent(jLabel63)
-                            .addComponent(jLabel62))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 330, Short.MAX_VALUE)
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel17)
+                                .addGap(18, 18, 18)
+                                .addComponent(FSFC_1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel19)
+                                .addGap(18, 18, 18)
+                                .addComponent(FSFC_2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel61)
+                                .addGap(18, 18, 18)
+                                .addComponent(SRT_1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel65)
+                                .addGap(18, 18, 18)
+                                .addComponent(SRT_5, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel64)
+                                .addGap(18, 18, 18)
+                                .addComponent(SRT_3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel63)
+                                .addGap(18, 18, 18)
+                                .addComponent(SRT_2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel62)
+                                .addGap(18, 18, 18)
+                                .addComponent(SRT_4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel20)
+                                .addGap(18, 18, 18)
+                                .addComponent(FSFC_3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel18)
+                                .addGap(18, 18, 18)
+                                .addComponent(FSFC_4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(EstadísticasLayout.createSequentialGroup()
+                                    .addComponent(jLabel22)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(FSFC_5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
                         .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel23)
-                            .addComponent(jLabel45)
-                            .addComponent(jLabel26)
-                            .addComponent(jLabel25)
-                            .addComponent(jLabel24)
-                            .addComponent(jLabel56)
-                            .addComponent(jLabel60)
-                            .addComponent(jLabel59)
-                            .addComponent(jLabel58)
-                            .addComponent(jLabel57))
-                        .addGap(176, 176, 176))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel45)
+                                .addGap(18, 18, 18)
+                                .addComponent(RR_5, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel56)
+                                .addGap(18, 18, 18)
+                                .addComponent(HRRN_1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel60)
+                                .addGap(18, 18, 18)
+                                .addComponent(HRRN_5, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel23)
+                                .addGap(18, 18, 18)
+                                .addComponent(RR_1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel25)
+                                .addGap(18, 18, 18)
+                                .addComponent(RR_2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel58)
+                                .addGap(18, 18, 18)
+                                .addComponent(HRRN_2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel26)
+                                .addGap(18, 18, 18)
+                                .addComponent(RR_3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel24)
+                                .addGap(18, 18, 18)
+                                .addComponent(RR_4, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, EstadísticasLayout.createSequentialGroup()
+                                    .addComponent(jLabel57)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(HRRN_4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, EstadísticasLayout.createSequentialGroup()
+                                    .addComponent(jLabel59)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(HRRN_3, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(170, 170, 170))
                     .addGroup(EstadísticasLayout.createSequentialGroup()
                         .addComponent(jLabel67)
+                        .addGap(18, 18, 18)
+                        .addComponent(SRT_6, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel68)
-                        .addGap(235, 235, 235))
+                        .addGap(18, 18, 18)
+                        .addComponent(HRRN_6, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(246, 246, 246))
                     .addGroup(EstadísticasLayout.createSequentialGroup()
                         .addComponent(jLabel66)
+                        .addGap(18, 18, 18)
+                        .addComponent(FSFC_6, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel71)
-                        .addGap(235, 235, 235)))
+                        .addGap(18, 18, 18)
+                        .addComponent(RR_6, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(232, 232, 232)))
                 .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel69)
-                    .addComponent(jLabel51)
-                    .addComponent(jLabel55)
-                    .addComponent(jLabel54)
-                    .addComponent(jLabel53)
-                    .addComponent(jLabel52)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel46)
-                    .addComponent(jLabel50)
-                    .addComponent(jLabel49)
-                    .addComponent(jLabel48)
-                    .addComponent(jLabel47)
-                    .addComponent(jLabel70))
-                .addGap(374, 374, 374))
+                    .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(EstadísticasLayout.createSequentialGroup()
+                            .addComponent(jLabel55)
+                            .addGap(18, 18, 18)
+                            .addComponent(MLFQ_5, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(EstadísticasLayout.createSequentialGroup()
+                            .addComponent(jLabel46)
+                            .addGap(18, 18, 18)
+                            .addComponent(SPN_1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(EstadísticasLayout.createSequentialGroup()
+                            .addComponent(jLabel48)
+                            .addGap(18, 18, 18)
+                            .addComponent(SPN_2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(EstadísticasLayout.createSequentialGroup()
+                            .addComponent(jLabel49)
+                            .addGap(18, 18, 18)
+                            .addComponent(SPN_3, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(EstadísticasLayout.createSequentialGroup()
+                            .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, EstadísticasLayout.createSequentialGroup()
+                                    .addComponent(jLabel50)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(SPN_5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jLabel51, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addGap(18, 18, 18)
+                            .addComponent(MLFQ_1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(EstadísticasLayout.createSequentialGroup()
+                            .addComponent(jLabel70)
+                            .addGap(18, 18, 18)
+                            .addComponent(SPN_6, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel54)
+                                .addGap(18, 18, 18)
+                                .addComponent(MLFQ_3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel53)
+                                .addGap(18, 18, 18)
+                                .addComponent(MLFQ_2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(EstadísticasLayout.createSequentialGroup()
+                            .addComponent(jLabel69)
+                            .addGap(18, 18, 18)
+                            .addComponent(MLFQ_6, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(EstadísticasLayout.createSequentialGroup()
+                        .addComponent(jLabel52)
+                        .addGap(18, 18, 18)
+                        .addComponent(MLFQ_4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(EstadísticasLayout.createSequentialGroup()
+                        .addComponent(jLabel47)
+                        .addGap(18, 18, 18)
+                        .addComponent(SPN_4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(165, 165, 165))
         );
         EstadísticasLayout.setVerticalGroup(
             EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1038,41 +1412,77 @@ import javax.swing.JOptionPane;
                 .addGap(18, 18, 18)
                 .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(EstadísticasLayout.createSequentialGroup()
-                        .addComponent(jLabel17)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel17)
+                            .addComponent(FSFC_1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel19)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel19)
+                            .addComponent(FSFC_2))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel20)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel20)
+                            .addComponent(FSFC_3))
                         .addGap(13, 13, 13)
-                        .addComponent(jLabel18)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel18)
+                            .addComponent(FSFC_4))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel22))
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel22)
+                            .addComponent(FSFC_5)))
                     .addGroup(EstadísticasLayout.createSequentialGroup()
-                        .addComponent(jLabel23)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel23)
+                            .addComponent(RR_1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel25)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel25)
+                            .addComponent(RR_2))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel26)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel26)
+                            .addComponent(RR_3))
                         .addGap(13, 13, 13)
-                        .addComponent(jLabel24)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel24)
+                            .addComponent(RR_4))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel45))
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel45)
+                            .addComponent(RR_5)))
                     .addGroup(EstadísticasLayout.createSequentialGroup()
-                        .addComponent(jLabel46)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel46)
+                            .addComponent(SPN_1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel48)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel48)
+                            .addComponent(SPN_2))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel49)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel49)
+                            .addComponent(SPN_3))
                         .addGap(13, 13, 13)
-                        .addComponent(jLabel47)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel47)
+                            .addComponent(SPN_4))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel50)))
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel50)
+                            .addComponent(SPN_5))))
                 .addGap(18, 18, 18)
                 .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel66)
-                    .addComponent(jLabel70)
-                    .addComponent(jLabel71))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                    .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel66)
+                        .addComponent(FSFC_6))
+                    .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel70)
+                        .addComponent(SPN_6))
+                    .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel71)
+                        .addComponent(RR_6)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(jLabel15)
@@ -1080,40 +1490,76 @@ import javax.swing.JOptionPane;
                 .addGap(18, 18, 18)
                 .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(EstadísticasLayout.createSequentialGroup()
-                        .addComponent(jLabel51)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel51)
+                            .addComponent(MLFQ_1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel53)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel53)
+                            .addComponent(MLFQ_2))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel54)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel54)
+                            .addComponent(MLFQ_3))
                         .addGap(13, 13, 13)
-                        .addComponent(jLabel52)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel52)
+                            .addComponent(MLFQ_4))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel55))
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel55)
+                            .addComponent(MLFQ_5)))
                     .addGroup(EstadísticasLayout.createSequentialGroup()
-                        .addComponent(jLabel56)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel56)
+                            .addComponent(HRRN_1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel58)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel58)
+                            .addComponent(HRRN_2))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel59)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel59)
+                            .addComponent(HRRN_3))
                         .addGap(13, 13, 13)
-                        .addComponent(jLabel57)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel57)
+                            .addComponent(HRRN_4))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel60))
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel60)
+                            .addComponent(HRRN_5)))
                     .addGroup(EstadísticasLayout.createSequentialGroup()
-                        .addComponent(jLabel61)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel61)
+                            .addComponent(SRT_1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel63)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel63)
+                            .addComponent(SRT_2))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel64)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel64)
+                            .addComponent(SRT_3))
                         .addGap(13, 13, 13)
-                        .addComponent(jLabel62)
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel62)
+                            .addComponent(SRT_4))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel65)))
+                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel65)
+                            .addComponent(SRT_5))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel67)
-                    .addComponent(jLabel68)
-                    .addComponent(jLabel69))
+                    .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel67)
+                        .addComponent(SRT_6))
+                    .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel68)
+                        .addComponent(HRRN_6))
+                    .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel69)
+                        .addComponent(MLFQ_6)))
                 .addGap(46, 46, 46))
         );
 
@@ -1404,13 +1850,26 @@ import javax.swing.JOptionPane;
     private javax.swing.JButton CambiarCicloReloj;
     private javax.swing.JButton CambiarPolitica;
     private javax.swing.JTextArea CicloActual;
+    private javax.swing.JLabel Ciclos;
     private javax.swing.JPanel Configuracion;
     private javax.swing.JButton CrearP;
     private javax.swing.JButton CrearPAuto;
     private javax.swing.JSpinner DurCicloReloj;
     private javax.swing.JLabel DurCicloRelojAct;
     private javax.swing.JPanel Estadísticas;
+    private javax.swing.JLabel FSFC_1;
+    private javax.swing.JLabel FSFC_2;
+    private javax.swing.JLabel FSFC_3;
+    private javax.swing.JLabel FSFC_4;
+    private javax.swing.JLabel FSFC_5;
+    private javax.swing.JLabel FSFC_6;
     private javax.swing.JTabbedPane Graficos;
+    private javax.swing.JLabel HRRN_1;
+    private javax.swing.JLabel HRRN_2;
+    private javax.swing.JLabel HRRN_3;
+    private javax.swing.JLabel HRRN_4;
+    private javax.swing.JLabel HRRN_5;
+    private javax.swing.JLabel HRRN_6;
     private javax.swing.JToggleButton IndicadorActivo;
     private javax.swing.JToggleButton IniciarPausarButton;
     private javax.swing.JList<EstructuraDeDatos.Proceso> ListaBloqueado;
@@ -1419,11 +1878,40 @@ import javax.swing.JOptionPane;
     private javax.swing.JList<EstructuraDeDatos.Proceso> ListaNuevo;
     private javax.swing.JList<EstructuraDeDatos.Proceso> ListaSuspBloqueado;
     private javax.swing.JList<EstructuraDeDatos.Proceso> ListaSuspListo;
+    private javax.swing.JLabel MLFQ_1;
+    private javax.swing.JLabel MLFQ_2;
+    private javax.swing.JLabel MLFQ_3;
+    private javax.swing.JLabel MLFQ_4;
+    private javax.swing.JLabel MLFQ_5;
+    private javax.swing.JLabel MLFQ_6;
     private javax.swing.JSpinner NInstrucciones;
     private javax.swing.JTextField NombreProceso;
     private javax.swing.JComboBox<String> PoliticaPlanificacion;
+    private javax.swing.JLabel ProcesosCPU;
+    private javax.swing.JLabel ProcesosIO;
+    private javax.swing.JLabel ProcesosTerminados;
+    private javax.swing.JLabel RR_1;
+    private javax.swing.JLabel RR_2;
+    private javax.swing.JLabel RR_3;
+    private javax.swing.JLabel RR_4;
+    private javax.swing.JLabel RR_5;
+    private javax.swing.JLabel RR_6;
+    private javax.swing.JLabel SPN_1;
+    private javax.swing.JLabel SPN_2;
+    private javax.swing.JLabel SPN_3;
+    private javax.swing.JLabel SPN_4;
+    private javax.swing.JLabel SPN_5;
+    private javax.swing.JLabel SPN_6;
+    private javax.swing.JLabel SRT_1;
+    private javax.swing.JLabel SRT_2;
+    private javax.swing.JLabel SRT_3;
+    private javax.swing.JLabel SRT_4;
+    private javax.swing.JLabel SRT_5;
+    private javax.swing.JLabel SRT_6;
     private javax.swing.JPanel Simulador;
+    private javax.swing.JLabel Throughtput;
     private javax.swing.JComboBox<String> TipoProceso;
+    private javax.swing.JLabel UsoCPU;
     private javax.swing.JSpinner ciclosGenerarSpinner;
     private javax.swing.JSpinner ciclosSatisfacerSpinner;
     private javax.swing.JTextArea enEjec;

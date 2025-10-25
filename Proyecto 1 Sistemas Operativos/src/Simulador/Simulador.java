@@ -42,7 +42,8 @@ public class Simulador implements Runnable {
 
     // --- Estado de la Simulación ---
     private volatile boolean enEjecucion = false;
-    private Thread hiloSimulacion; 
+    private Thread hiloSimulacion;
+    public Estadisticas stats;
     
     // --- Parámetros Configurables ---
     private int quantum = 8; // Quantum para Round Robin y nivel superior de MLFQ
@@ -101,6 +102,7 @@ public class Simulador implements Runnable {
     // Para simplificar, asumiremos que cambiar el planificador vacía la cola de listos.
     // Una implementación más robusta es más compleja.
     this.planificador = nuevaEstrategia;
+    stats.update_planificador(nuevaEstrategia.getNombre());
     System.out.println("PLANIFICADOR CAMBIADO A: " + nuevaEstrategia.getNombre());
     
     }
@@ -122,7 +124,9 @@ public class Simulador implements Runnable {
         while (enEjecucion) {
             clock.tick();
             log("\n----- CICLO #" + clock.getCicloActual() + " | Planificador: " + planificador.getNombre() + " -----"); 
-
+            stats.update_Ciclos();
+            stats.update_CPU();
+            
             gestionarColaBloqueados();
             gestionarColaSuspendidosBloqueados();
             reanudarProcesosSuspendidos();
@@ -144,7 +148,8 @@ public class Simulador implements Runnable {
             if (procesoEnCPU != null) {
                 ejecutarCicloCPU();
             } else {
-                log("CPU OCIOSA."); 
+                log("CPU OCIOSA.");
+                stats.update_OCIO();
             }
             
             clock.esperar();
@@ -158,7 +163,15 @@ public class Simulador implements Runnable {
         quantumRestante--;
 
         if (procesoEnCPU.haTerminado()) {
-            log("EVENTO | Proceso " + procesoEnCPU.getId() + " ha TERMINADO."); 
+            log("EVENTO | Proceso " + procesoEnCPU.getId() + " ha TERMINADO.");
+            stats.update_Ejecutados();
+            if (procesoEnCPU.esIOBound()) {
+                stats.update_ProcesosIO();
+                stats.update_Throughtput();
+            } else {
+                // Si no es I/O Bound entonces es CPU Bound
+                stats.update_ProcesosCPU();
+            }
             procesoEnCPU.setEstado(Proceso.EstadoProceso.TERMINADO);
             colaTerminados.encolar(procesoEnCPU);
             procesoEnCPU = null;
