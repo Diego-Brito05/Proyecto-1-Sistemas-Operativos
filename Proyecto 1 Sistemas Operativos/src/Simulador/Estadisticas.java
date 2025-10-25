@@ -183,38 +183,38 @@ public class Estadisticas {
         // y para cada uno de las políticas de planificación.
         switch (planificadorActivo) {
             case 1 -> {
-                double CicloEjecucion = FCFS_Ciclos - FCFS_Ocio;
-                FCFS_Throughtput = (FCFS_Ejecutados/CicloEjecucion);
+                double CicloEjecucion = FCFS_Ciclos-FCFS_Ocio;
+                FCFS_Throughtput = FCFS_Ejecutados/CicloEjecucion;
                 FCFS();
             }
             case 2 -> {
-                double CicloEjecucion = HRRN_Ciclos - HRRN_Ocio;
+                double CicloEjecucion = HRRN_Ciclos-HRRN_Ocio;
                 HRRN_Throughtput = HRRN_Ejecutados/CicloEjecucion;
                 HRRN();
             }
             case 3 -> {
-                double CicloEjecucion = MLFQ_Ciclos - MLFQ_Ocio;
+                double CicloEjecucion = MLFQ_Ciclos-MLFQ_Ocio;
                 MLFQ_Throughtput = MLFQ_Ejecutados/CicloEjecucion;
                 MLFQ();
             }
             case 4 -> {
-                double CicloEjecucion = SPN_Ciclos - SPN_Ocio;
+                double CicloEjecucion = SPN_Ciclos-SPN_Ocio;
                 SPN_Throughtput = SPN_Ejecutados/CicloEjecucion;
                 SPN();
             }
             case 5 -> {
-                double CicloEjecucion = SRT_Ciclos - SRT_Ocio;
+                double CicloEjecucion = SRT_Ciclos-SRT_Ocio;
                 SRT_Throughtput = SRT_Ejecutados/CicloEjecucion;
                 SRT();
             }
             default -> {
-                double CicloEjecucion = RR_Ciclos - RR_Ocio;
-                RR_Throughtput = (RR_Ejecutados/CicloEjecucion);
+                double CicloEjecucion = RR_Ciclos-RR_Ocio;
+                RR_Throughtput = RR_Ejecutados/CicloEjecucion;
                 RR();
             }
         }
         double politicas = 0.0;
-        if (FCFS_Ciclos-FCFS_Ocio == 0) {
+        if (FCFS_Ciclos-FCFS_Ocio != 0) {
             politicas++;
         } else if (RR_Ciclos-RR_Ocio != 0) {
             politicas++;
@@ -222,9 +222,9 @@ public class Estadisticas {
             politicas++;
         } else if (MLFQ_Ciclos-MLFQ_Ocio != 0) {
             politicas++;
-        } else if (SPN_Ciclos-SPN_Ocio == 0) {
+        } else if (SPN_Ciclos-SPN_Ocio != 0) {
             politicas++;
-        } else if (SRT_Ciclos-SRT_Ocio == 0) {
+        } else if (SRT_Ciclos-SRT_Ocio != 0) {
             politicas++;
         }
         Throughtput = (FCFS_Throughtput+HRRN_Throughtput+MLFQ_Throughtput+SPN_Throughtput+SRT_Throughtput+RR_Throughtput)/politicas;
