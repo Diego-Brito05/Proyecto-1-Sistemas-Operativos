@@ -165,9 +165,9 @@ public class Simulador implements Runnable {
         if (procesoEnCPU.haTerminado()) {
             log("EVENTO | Proceso " + procesoEnCPU.getId() + " ha TERMINADO.");
             stats.update_Ejecutados();
+            stats.update_Throughtput();
             if (procesoEnCPU.esIOBound()) {
                 stats.update_ProcesosIO();
-                stats.update_Throughtput();
             } else {
                 // Si no es I/O Bound entonces es CPU Bound
                 stats.update_ProcesosCPU();
