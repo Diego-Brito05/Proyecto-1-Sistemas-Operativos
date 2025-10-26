@@ -37,6 +37,12 @@ private final JPanel panelPrincipal;
     // Fuentes 
     private final Font FONT_BOLD_14 = new Font("Segoe UI", Font.BOLD, 14);
     private final Font FONT_PLAIN_11 = new Font("Segoe UI", Font.PLAIN, 11);
+    
+    //Colores
+    private final Color bajaPrioridad = new Color(105,55,46);
+    private final Color mediaPrioridad = new Color(107,76,21);
+    private final Color altaPrioridad = new Color(12,69,12);
+    private final Color negroDefault = new Color(0,0,0);
 
     public ProcesoListRenderer() {
         panelPrincipal = new JPanel();
@@ -78,7 +84,19 @@ private final JPanel panelPrincipal;
     public Component getListCellRendererComponent(JList<? extends Proceso> list, Proceso proceso, int index, boolean isSelected, boolean cellHasFocus) {
         
         
-        lblNombre.setText(proceso.getNombre()); 
+        lblNombre.setText(proceso.getNombre());
+        
+        //Si tiene prioridad entonces se le coloca en el color.
+        if (proceso.getPrioridad() == 0) {
+            lblNombre.setForeground(altaPrioridad);
+        } else if (proceso.getPrioridad() == 1) {
+            lblNombre.setForeground(mediaPrioridad);
+        } else if (proceso.getPrioridad() == 2) {
+            lblNombre.setForeground(bajaPrioridad);
+        } else {
+            lblNombre.setForeground(negroDefault);
+        }
+        
         lblId.setText("ID: " + proceso.getId());    
     
         lblInfoPC.setText("PC: " + proceso.getProgramCounter());

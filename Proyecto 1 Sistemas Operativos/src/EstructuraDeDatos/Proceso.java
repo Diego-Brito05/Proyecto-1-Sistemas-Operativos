@@ -22,7 +22,7 @@ public class Proceso implements Comparable<Proceso> {
     private int ciclosExcepcionCompletada;
     private int ciclosEsperaIO;
     private int prioridad;
-    private int quantumRestante; // Este ya lo tenías, ¡perfecto para Round Robin!
+    private int quantumRestante;
 
     // --- CAMPOS PARA MÉTRICAS Y PLANIFICACIÓN AVANZADA ---
     /**

@@ -15,6 +15,8 @@ import EstructuraDeDatos.Proceso;
 public class MLFQ implements EstrategiaPlanificacion {
     private final Cola<Proceso>[] colasDePrioridad;
     private final int numNiveles = 3;
+    private int mediumCounter;
+    private int lowCounter;
 
     @SuppressWarnings("unchecked")
     public MLFQ() {
@@ -22,6 +24,8 @@ public class MLFQ implements EstrategiaPlanificacion {
         for (int i = 0; i < numNiveles; i++) {
             colasDePrioridad[i] = new Cola<>();
         }
+        this.mediumCounter = 0;
+        this.lowCounter = 0;
     }
 
     @Override
@@ -48,10 +52,32 @@ public class MLFQ implements EstrategiaPlanificacion {
 
     @Override
     public Proceso peekSiguienteProceso() {
-        for (int i = 0; i < numNiveles; i++) {
+        if (mediumCounter >= 4) {
+            // El proceso con prioridad media que esté al frente se ejecutará
+            mediumCounter = 0;
+            if (!colasDePrioridad[2].estaVacia()){
+                lowCounter++;
+            }
+            return colasDePrioridad[1].verFrente();
+        } else if (lowCounter >= 7) {
+            // El proceso con prioridad baja que esté al frente se ejecutará
+            lowCounter = 0;
+            if (!colasDePrioridad[1].estaVacia()) {
+                mediumCounter++;
+            }
+            return colasDePrioridad[2].verFrente();
+        } else {
+            if (!colasDePrioridad[1].estaVacia()) {
+                mediumCounter++;
+            }
+            if (!colasDePrioridad[2].estaVacia()){
+                lowCounter++;
+            }
+            for (int i = 0; i < numNiveles; i++) {
             if (!colasDePrioridad[i].estaVacia()) {
                 // Usamos verFrente() para no eliminarlo
                 return colasDePrioridad[i].verFrente();
+            }
             }
         }
         return null;
