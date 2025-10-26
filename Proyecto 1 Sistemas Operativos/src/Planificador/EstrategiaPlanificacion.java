@@ -31,6 +31,10 @@ public interface EstrategiaPlanificacion {
      * @return El próximo proceso, o null si no hay ninguno.
      */
     Proceso peekSiguienteProceso();
+    
+    //Proceso getListos();
+    
+    //Proceso setListos();
 
     /**
      * Devuelve el número de procesos actualmente en estado LISTO.

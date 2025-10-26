@@ -39,9 +39,8 @@ private final JPanel panelPrincipal;
     private final Font FONT_PLAIN_11 = new Font("Segoe UI", Font.PLAIN, 11);
     
     //Colores
-    private final Color bajaPrioridad = new Color(105,55,46);
-    private final Color mediaPrioridad = new Color(107,76,21);
-    private final Color altaPrioridad = new Color(12,69,12);
+    private final Color bajaPrioridad = new Color(115,49,49);
+    private final Color mediaPrioridad = new Color(168,108,56);
     private final Color negroDefault = new Color(0,0,0);
 
     public ProcesoListRenderer() {
@@ -86,17 +85,6 @@ private final JPanel panelPrincipal;
         
         lblNombre.setText(proceso.getNombre());
         
-        //Si tiene prioridad entonces se le coloca en el color.
-        if (proceso.getPrioridad() == 0) {
-            lblNombre.setForeground(altaPrioridad);
-        } else if (proceso.getPrioridad() == 1) {
-            lblNombre.setForeground(mediaPrioridad);
-        } else if (proceso.getPrioridad() == 2) {
-            lblNombre.setForeground(bajaPrioridad);
-        } else {
-            lblNombre.setForeground(negroDefault);
-        }
-        
         lblId.setText("ID: " + proceso.getId());    
     
         lblInfoPC.setText("PC: " + proceso.getProgramCounter());
@@ -125,6 +113,16 @@ private final JPanel panelPrincipal;
             lblInfoPC.setForeground(list.getForeground());
             lblInfoMAR.setForeground(list.getForeground());
             // La etiqueta de tipo conserva su color rojo/azul
+        }
+        
+        //Si tiene prioridad entonces se le coloca en el color.
+        
+        if (proceso.getNivelMLFQ() == 1) {
+            lblNombre.setForeground(mediaPrioridad);
+        } else if (proceso.getNivelMLFQ() == 2) {
+            lblNombre.setForeground(bajaPrioridad);
+        } else {
+            lblNombre.setForeground(negroDefault);
         }
 
         return panelPrincipal;
