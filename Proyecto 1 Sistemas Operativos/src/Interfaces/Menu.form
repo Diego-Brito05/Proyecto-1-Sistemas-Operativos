@@ -636,7 +636,7 @@
                               <Component id="PoliticaPlanificacion" max="32767" attributes="0"/>
                               <Component id="CambiarPolitica" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="347" max="32767" attributes="0"/>
+                          <EmptySpace pref="533" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -765,7 +765,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="1756" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="1948" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -787,7 +787,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="1756" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="1948" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -809,7 +809,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="1756" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="1948" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -897,7 +897,7 @@
                                   </Group>
                                   <Component id="jLabel12" alignment="1" min="-2" pref="219" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="246" max="32767" attributes="0"/>
+                              <EmptySpace pref="442" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="103" alignment="0" groupAlignment="0" attributes="0">
                                       <Component id="jLabel13" alignment="1" min="-2" pref="219" max="-2" attributes="0"/>
@@ -1297,7 +1297,7 @@
                                           <Component id="ProcesosTerminados" min="-2" pref="76" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace pref="512" max="32767" attributes="0"/>
+                                  <EmptySpace pref="609" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -1317,7 +1317,7 @@
                                           <Component id="Throughtput" min="-2" pref="173" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace pref="612" max="32767" attributes="0"/>
+                                  <EmptySpace pref="708" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <Component id="jLabel5" min="-2" pref="219" max="-2" attributes="0"/>

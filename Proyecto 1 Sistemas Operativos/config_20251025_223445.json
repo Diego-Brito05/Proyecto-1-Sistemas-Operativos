@@ -1,0 +1,4 @@
+{
+    "politicaPlanificacion": "RoundRobin",
+    "duracionCicloSegundos": 0.75
+}
