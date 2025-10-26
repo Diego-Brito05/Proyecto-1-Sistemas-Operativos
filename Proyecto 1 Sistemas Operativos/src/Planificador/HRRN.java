@@ -4,11 +4,94 @@
  */
 package Planificador;
 
+import EstructuraDeDatos.ListaEnlazadaSincronizada;
+import EstructuraDeDatos.Proceso;
+import EstructuraDeDatos.Cola;
+
 /**
  *
  * @author Diego
  * Highest Response Ratio Next
  */
-public class HRRN {
+public class HRRN implements EstrategiaPlanificacion {
+    private final ListaEnlazadaSincronizada<Proceso> listaListos;
+
+    public HRRN() {
+        this.listaListos = new ListaEnlazadaSincronizada<>();
+    }
     
+    @Override
+    public void agregarProceso(Proceso proceso) {
+        listaListos.agregar(proceso);
+    }
+
+    @Override
+    public Proceso getSiguienteProceso() {
+        Proceso mejorProceso = encontrarProcesoConMejorRatio();
+        if (mejorProceso != null) {
+            listaListos.eliminar(mejorProceso);
+        }
+        return mejorProceso;
+    }
+    
+    // --- NUEVOS MÉTODOS IMPLEMENTADOS ---
+
+    @Override
+    public Proceso peekSiguienteProceso() {
+        return encontrarProcesoConMejorRatio();
+    }
+
+    @Override
+    public int getNumeroProcesosListos() {
+        return listaListos.getTamano();
+    }
+    
+    @Override
+    public Cola<Proceso> getListos() {
+        Cola<Proceso> listos = new Cola();
+        while (!listaListos.estaVacia()) {
+            listos.encolar(getSiguienteProceso());
+        }
+        return listos;
+    }
+
+    @Override
+    public Object[] getProcesosListosComoArray() {
+        return listaListos.obtenerComoArray();
+    }
+
+    // --- MÉTODO AUXILIAR ---
+
+    private Proceso encontrarProcesoConMejorRatio() {
+        if (listaListos.estaVacia()) {
+            return null;
+        }
+
+        Object[] procesosArray = listaListos.obtenerComoArray();
+        if (procesosArray.length == 0) return null;
+        
+        Proceso mejorProceso = null;
+        double maxRatio = -1.0;
+
+        for (Object obj : procesosArray) {
+            Proceso p = (Proceso) obj;
+            long tiempoEspera = p.getTiempoEsperaTotal();
+            long tiempoServicio = p.getTotalInstrucciones();
+            
+            if (tiempoServicio == 0) continue;
+            
+            double ratio = (double) (tiempoEspera + tiempoServicio) / tiempoServicio;
+            
+            if (ratio > maxRatio) {
+                maxRatio = ratio;
+                mejorProceso = p;
+            }
+        }
+        return mejorProceso;
+    }
+
+    @Override
+    public String getNombre() {
+        return "HRRN (Highest Response Ratio Next)";
+    }
 }
