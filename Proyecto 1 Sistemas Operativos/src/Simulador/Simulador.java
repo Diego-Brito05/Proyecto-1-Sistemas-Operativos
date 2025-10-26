@@ -6,7 +6,8 @@ package Simulador;
  */
 import EstructuraDeDatos.Cola;
 import EstructuraDeDatos.Proceso;
-import Planificador.*; // Importa todas las clases de planificación
+import Planificador.*; // Importa todas las clases de planificación.
+import Graficos.*; // Importa todas las clases de gráficos.
 
 
 /**
@@ -43,6 +44,8 @@ public class Simulador implements Runnable {
     // --- Estado de la Simulación ---
     private volatile boolean enEjecucion = false;
     private Thread hiloSimulacion;
+    
+    // --- Estadisticas del sistema ---
     public Estadisticas stats;
     
     // --- Parámetros Configurables ---
@@ -63,6 +66,7 @@ public class Simulador implements Runnable {
 
         this.procesoEnCPU = null;
         this.hiloSimulacion = null; 
+        
     }
 
     // --- Control de la Simulación ---

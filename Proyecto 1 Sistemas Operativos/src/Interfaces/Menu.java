@@ -16,7 +16,9 @@ import Planificador.SRT;
 import Simulador.Simulador;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import java.awt.*; 
 import Simulador.Estadisticas;
+import Graficos.*;
 
 /**
  *
@@ -35,6 +37,10 @@ import Simulador.Estadisticas;
     private Estadisticas stats;
     private int autoProcessCounter = 1;
     
+    public GraficoThroughputs GraphThr;
+    public GraficoPoliticas GraphPoliticas;
+    public GraficoIOCPU GraphIOCPU;
+    
 
     // En el constructor de tu clase Menu
     public Menu() {
@@ -46,6 +52,31 @@ import Simulador.Estadisticas;
         stats.Menu=this;
         miSimulador = new Simulador();
         miSimulador.stats = stats;
+        
+        
+        this.GraphIOCPU = new GraficoIOCPU();
+        this.GraphPoliticas = new GraficoPoliticas();
+        this.GraphThr = new GraficoThroughputs();
+        
+        jPanel2.setLayout(new BorderLayout());
+        jPanel2.add(GraphThr, BorderLayout.CENTER);
+        jPanel2.revalidate();
+        jPanel2.repaint();   
+    
+        jPanel4.setLayout(new BorderLayout());
+        jPanel4.add(GraphPoliticas, BorderLayout.CENTER);
+        jPanel4.revalidate();
+        jPanel4.repaint(); 
+        
+        jPanel3.setLayout(new BorderLayout());
+        jPanel3.add(GraphIOCPU, BorderLayout.CENTER);
+        jPanel3.revalidate();
+        jPanel3.repaint(); 
+        
+        stats.setGraphThr(this.GraphThr);
+        stats.setGraphPoliticas(this.GraphPoliticas);
+        stats.setGraphIOCPU(this.GraphIOCPU);
+        
         configurarEstadoInicial();
         
         
@@ -68,6 +99,7 @@ import Simulador.Estadisticas;
             }
         });
         guiUpdateTimer.start(); // Inicia el timer
+        
     }
 
     // Método para establecer los valores iniciales de la GUI
@@ -763,7 +795,7 @@ import Simulador.Estadisticas;
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(109, Short.MAX_VALUE))))
+                        .addContainerGap(132, Short.MAX_VALUE))))
         );
 
         jTabbedPane2.addTab("Simulador", Simulador);
@@ -876,7 +908,7 @@ import Simulador.Estadisticas;
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(431, Short.MAX_VALUE))
+                .addContainerGap(454, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Configuración", Configuracion);
@@ -891,7 +923,7 @@ import Simulador.Estadisticas;
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 738, Short.MAX_VALUE)
+            .addGap(0, 761, Short.MAX_VALUE)
         );
 
         Graficos.addTab("Comparación Throughputs", jPanel2);
@@ -904,7 +936,7 @@ import Simulador.Estadisticas;
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 738, Short.MAX_VALUE)
+            .addGap(0, 761, Short.MAX_VALUE)
         );
 
         Graficos.addTab("Comparación I/O Bound y CPU Bound", jPanel3);
@@ -917,7 +949,7 @@ import Simulador.Estadisticas;
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 738, Short.MAX_VALUE)
+            .addGap(0, 761, Short.MAX_VALUE)
         );
 
         Graficos.addTab("Comparación Tiempo Políticas", jPanel4);
@@ -1273,12 +1305,11 @@ import Simulador.Estadisticas;
                                 .addComponent(jLabel18)
                                 .addGap(18, 18, 18)
                                 .addComponent(FSFC_4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(EstadísticasLayout.createSequentialGroup()
-                                    .addComponent(jLabel22)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(FSFC_5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel22)
+                                .addGap(18, 18, 18)
+                                .addComponent(FSFC_5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
                         .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1377,15 +1408,14 @@ import Simulador.Estadisticas;
                             .addComponent(jLabel70)
                             .addGap(18, 18, 18)
                             .addComponent(SPN_6, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, EstadísticasLayout.createSequentialGroup()
-                                .addComponent(jLabel54)
-                                .addGap(18, 18, 18)
-                                .addComponent(MLFQ_3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, EstadísticasLayout.createSequentialGroup()
-                                .addComponent(jLabel53)
-                                .addGap(18, 18, 18)
-                                .addComponent(MLFQ_2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(EstadísticasLayout.createSequentialGroup()
+                            .addComponent(jLabel54)
+                            .addGap(18, 18, 18)
+                            .addComponent(MLFQ_3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(EstadísticasLayout.createSequentialGroup()
+                            .addComponent(jLabel53)
+                            .addGap(18, 18, 18)
+                            .addComponent(MLFQ_2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(EstadísticasLayout.createSequentialGroup()
                             .addComponent(jLabel69)
                             .addGap(18, 18, 18)
@@ -1482,7 +1512,7 @@ import Simulador.Estadisticas;
                     .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel71)
                         .addComponent(RR_6)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(jLabel15)

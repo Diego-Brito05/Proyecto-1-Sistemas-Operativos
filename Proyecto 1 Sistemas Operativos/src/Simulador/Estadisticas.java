@@ -4,6 +4,8 @@
  */
 package Simulador;
 
+import Graficos.*;
+
 /**
  * Aquí se hacen todos los cálculos y comprobaciones para obtener
  * los datos estadísticos de ejecución. 
@@ -78,6 +80,11 @@ public class Estadisticas {
     private long SRT_Ciclos = 0;
     private long SRT_CPU = 0;
     private double SRT_Ocio = 0.0;
+    
+    //Graficos
+    public GraficoThroughputs GraphThr;
+    public GraficoPoliticas GraphPoliticas;
+    public GraficoIOCPU GraphIOCPU;
     
     public void update_Ejecutados() {
         // Se actualizan la cantidad de procesos finalizados en general
@@ -262,6 +269,7 @@ public class Estadisticas {
         }
         Ciclos++;
         estadisticas();
+        update_graphs();
     }
     
     public void update_CPU() {
@@ -373,5 +381,28 @@ public class Estadisticas {
     
     private void RR() {
         Menu.actualizarRR(RR_Ejecutados, RR_ProcesosIO, RR_ProcesosCPU, RR_Ciclos, RR_Throughtput, RR_CPU);
+    }
+    
+    private void update_graphs() {
+        Double[] Throughtputs = new Double[]{FCFS_Throughtput,HRRN_Throughtput,MLFQ_Throughtput,SPN_Throughtput,SRT_Throughtput,RR_Throughtput};
+        GraphThr.actualizar(Throughtputs);
+        
+        Integer[] IOCPU = new Integer[]{ProcesosIO, ProcesosCPU};
+        GraphIOCPU.actualizar(IOCPU);
+        
+        Long[] UsoCiclos = new Long[]{FCFS_Ciclos,HRRN_Ciclos,MLFQ_Ciclos,SPN_Ciclos,SRT_Ciclos,RR_Ciclos};
+        GraphPoliticas.actualizar(UsoCiclos);
+    }
+    
+    public void setGraphThr(GraficoThroughputs Graph) {
+        this.GraphThr = Graph;
+    }
+    
+    public void setGraphPoliticas(GraficoPoliticas Graph) {
+        this.GraphPoliticas = Graph;
+    }
+    
+    public void setGraphIOCPU(GraficoIOCPU Graph) {
+        this.GraphIOCPU = Graph;
     }
 }
