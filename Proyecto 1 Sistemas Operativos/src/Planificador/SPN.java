@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Planificador;
+import EstructuraDeDatos.Cola;
 import EstructuraDeDatos.ListaEnlazadaSincronizada;
 import EstructuraDeDatos.Proceso;
 /**
@@ -42,6 +43,15 @@ public class SPN implements EstrategiaPlanificacion {
     @Override
     public int getNumeroProcesosListos() {
         return listaListos.getTamano();
+    }
+    
+    @Override
+    public Cola<Proceso> getListos() {
+        Cola<Proceso> listos = new Cola();
+        while (!listaListos.estaVacia()) {
+            listos.encolar(getSiguienteProceso());
+        }
+        return listos;
     }
     
     @Override

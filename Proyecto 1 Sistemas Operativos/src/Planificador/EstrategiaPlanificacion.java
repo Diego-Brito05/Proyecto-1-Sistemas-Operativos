@@ -4,6 +4,7 @@
  */
 package Planificador;
 import EstructuraDeDatos.Proceso;
+import EstructuraDeDatos.Cola;
 
 
 /**
@@ -32,9 +33,8 @@ public interface EstrategiaPlanificacion {
      */
     Proceso peekSiguienteProceso();
     
-    //Proceso getListos();
+    Cola<Proceso> getListos();
     
-    //Proceso setListos();
 
     /**
      * Devuelve el número de procesos actualmente en estado LISTO.

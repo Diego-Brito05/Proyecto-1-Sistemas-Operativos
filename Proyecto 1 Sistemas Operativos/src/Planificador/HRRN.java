@@ -6,6 +6,7 @@ package Planificador;
 
 import EstructuraDeDatos.ListaEnlazadaSincronizada;
 import EstructuraDeDatos.Proceso;
+import EstructuraDeDatos.Cola;
 
 /**
  *
@@ -43,6 +44,15 @@ public class HRRN implements EstrategiaPlanificacion {
     @Override
     public int getNumeroProcesosListos() {
         return listaListos.getTamano();
+    }
+    
+    @Override
+    public Cola<Proceso> getListos() {
+        Cola<Proceso> listos = new Cola();
+        while (!listaListos.estaVacia()) {
+            listos.encolar(getSiguienteProceso());
+        }
+        return listos;
     }
 
     @Override

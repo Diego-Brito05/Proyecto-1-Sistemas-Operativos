@@ -6,6 +6,7 @@ package Planificador;
 
 import EstructuraDeDatos.Cola;
 import EstructuraDeDatos.Proceso;
+import EstructuraDeDatos.Nodo;
 
 /**
  *
@@ -91,6 +92,19 @@ public class MLFQ implements EstrategiaPlanificacion {
         }
         return total;
     }
+    
+    @Override
+    public Cola<Proceso> getListos() {
+        Cola<Proceso> listos = new Cola();
+        for (int i = 0; i < numNiveles; i++) {
+            while (!colasDePrioridad[i].estaVacia()) {
+                Proceso actual = colasDePrioridad[i].desencolar();
+                listos.encolar(actual);
+            }
+        }
+        return listos;
+    }
+    
 
     @Override
     public Object[] getProcesosListosComoArray() {

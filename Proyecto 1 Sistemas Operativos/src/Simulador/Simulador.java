@@ -98,10 +98,14 @@ public class Simulador implements Runnable {
     * @param nuevaEstrategia La nueva instancia del algoritmo de planificación.
     */
     public void setPlanificador(EstrategiaPlanificacion nuevaEstrategia) {
-    // Aquí es donde se manejaría la migración de procesos de la cola de listos.
-    // Para simplificar, asumiremos que cambiar el planificador vacía la cola de listos.
-    // Una implementación más robusta es más compleja.
+    // Aquí se obtienen los procesos listos del planificador actual para no perderlos.
+    Cola<Proceso> procesos = this.planificador.getListos();
+    // Se inicia una nueva instancia del planificador que se quiere.
     this.planificador = nuevaEstrategia;
+    // Se añaden los procesos listos al nuevo planificador.
+    while (!procesos.estaVacia()) {
+        this.planificador.agregarProceso(procesos.desencolar());
+    }
     stats.update_planificador(nuevaEstrategia.getNombre());
     System.out.println("PLANIFICADOR CAMBIADO A: " + nuevaEstrategia.getNombre());
     

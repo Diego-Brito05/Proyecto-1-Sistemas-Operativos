@@ -43,6 +43,16 @@ public class RoundRobin implements EstrategiaPlanificacion {
     public int getNumeroProcesosListos() {
         return colaListos.getTamano();
     }
+    
+    @Override
+    public Cola<Proceso> getListos() {
+        Cola<Proceso> listos = new Cola();
+        while (!colaListos.estaVacia()) {
+            Proceso actual = colaListos.desencolar();
+            listos.encolar(actual);
+        }
+        return listos;
+    }
 
     @Override
     public Object[] getProcesosListosComoArray() {
