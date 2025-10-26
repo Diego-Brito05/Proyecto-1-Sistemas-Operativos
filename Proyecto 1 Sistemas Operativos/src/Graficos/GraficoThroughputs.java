@@ -32,14 +32,14 @@ public class GraficoThroughputs extends JPanel {
                 .height(500)
                 .title("Throughput Actual por Política")
                 .xAxisTitle("Planificador")
-                .yAxisTitle("Procesos / Ciclos Activos")
+                .yAxisTitle("Ciclos/Proceso")
                 .theme(Styler.ChartTheme.Matlab)
                 .build();
 
         chart.getStyler().setLegendVisible(false);
         chart.getStyler().setAvailableSpaceFill(0.9);
         chart.getStyler().setYAxisMin(0.0);
-        chart.getStyler().setYAxisMax(1.0);
+        chart.getStyler().setYAxisMax(100.0);
 
 
         chart.addSeries("Throughput", politicas, Arrays.asList(valores));

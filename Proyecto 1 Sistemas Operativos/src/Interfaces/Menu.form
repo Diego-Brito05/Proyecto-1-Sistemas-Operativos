@@ -1704,7 +1704,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="0.0 Procesos/Ciclos"/>
+                <Property name="text" type="java.lang.String" value="0.0 ciclos/procesos"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="FSFC_5">
@@ -1752,7 +1752,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="0.0 Procesos/Ciclos"/>
+                <Property name="text" type="java.lang.String" value="0.0 ciclos/procesos"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="SRT_5">
@@ -1800,7 +1800,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="0.0 Procesos/Ciclos"/>
+                <Property name="text" type="java.lang.String" value="0.0 ciclos/procesos"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="RR_5">
@@ -1848,7 +1848,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="0.0 Procesos/Ciclos"/>
+                <Property name="text" type="java.lang.String" value="0.0 ciclos/procesos"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="HRRN_5">
@@ -1896,7 +1896,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="0.0 Procesos/Ciclos"/>
+                <Property name="text" type="java.lang.String" value="0.0 ciclos/procesos"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="SPN_5">
@@ -1944,7 +1944,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="0.0 Procesos/Ciclos"/>
+                <Property name="text" type="java.lang.String" value="0.0 ciclos/procesos"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="MLFQ_5">

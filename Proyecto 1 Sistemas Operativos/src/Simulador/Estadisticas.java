@@ -191,32 +191,32 @@ public class Estadisticas {
         switch (planificadorActivo) {
             case 1 -> {
                 double CicloEjecucion = FCFS_Ciclos-FCFS_Ocio;
-                FCFS_Throughtput = FCFS_Ejecutados/CicloEjecucion;
+                FCFS_Throughtput = CicloEjecucion/FCFS_Ejecutados;
                 FCFS();
             }
             case 2 -> {
                 double CicloEjecucion = HRRN_Ciclos-HRRN_Ocio;
-                HRRN_Throughtput = HRRN_Ejecutados/CicloEjecucion;
+                HRRN_Throughtput = CicloEjecucion/HRRN_Ejecutados;
                 HRRN();
             }
             case 3 -> {
                 double CicloEjecucion = MLFQ_Ciclos-MLFQ_Ocio;
-                MLFQ_Throughtput = MLFQ_Ejecutados/CicloEjecucion;
+                MLFQ_Throughtput = CicloEjecucion/MLFQ_Ejecutados;
                 MLFQ();
             }
             case 4 -> {
                 double CicloEjecucion = SPN_Ciclos-SPN_Ocio;
-                SPN_Throughtput = SPN_Ejecutados/CicloEjecucion;
+                SPN_Throughtput = CicloEjecucion/SPN_Ejecutados;
                 SPN();
             }
             case 5 -> {
                 double CicloEjecucion = SRT_Ciclos-SRT_Ocio;
-                SRT_Throughtput = SRT_Ejecutados/CicloEjecucion;
+                SRT_Throughtput = CicloEjecucion/SRT_Ejecutados;
                 SRT();
             }
             default -> {
                 double CicloEjecucion = RR_Ciclos-RR_Ocio;
-                RR_Throughtput = RR_Ejecutados/CicloEjecucion;
+                RR_Throughtput = CicloEjecucion/RR_Ejecutados;
                 RR();
             }
         }
@@ -234,7 +234,7 @@ public class Estadisticas {
         } else if (SRT_Ciclos-SRT_Ocio != 0) {
             politicas++;
         }
-        Throughtput = (FCFS_Throughtput+HRRN_Throughtput+MLFQ_Throughtput+SPN_Throughtput+SRT_Throughtput+RR_Throughtput)/politicas;
+        Throughtput = politicas/(FCFS_Throughtput+HRRN_Throughtput+MLFQ_Throughtput+SPN_Throughtput+SRT_Throughtput+RR_Throughtput);
         estadisticas();
     }
     

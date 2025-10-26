@@ -179,7 +179,7 @@ import Graficos.*;
         this.ProcesosIO.setText(String.valueOf(IObound));
         this.ProcesosCPU.setText(String.valueOf(CPUbound));
         this.ProcesosTerminados.setText(String.valueOf(finalizados));
-        this.Throughtput.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.Throughtput.setText(String.format("%.2f", throughtput)+" ciclos/proceso");
         this.UsoCPU.setText(String.valueOf(cpu)+"%");
     }
     
@@ -188,7 +188,7 @@ import Graficos.*;
         this.FSFC_2.setText(String.valueOf(IObound));
         this.FSFC_3.setText(String.valueOf(CPUbound));
         this.FSFC_5.setText(String.valueOf(ciclos));
-        this.FSFC_4.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.FSFC_4.setText(String.format("%.2f", throughtput)+" ciclos/proceso");
         this.FSFC_6.setText(String.valueOf(cpu)+"%");
     }
     
@@ -197,7 +197,7 @@ import Graficos.*;
         this.HRRN_2.setText(String.valueOf(IObound));
         this.HRRN_3.setText(String.valueOf(CPUbound));
         this.HRRN_5.setText(String.valueOf(ciclos));
-        this.HRRN_4.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.HRRN_4.setText(String.format("%.2f", throughtput)+" ciclos/proceso");
         this.HRRN_6.setText(String.valueOf(cpu)+"%");
     }
     
@@ -206,7 +206,7 @@ import Graficos.*;
         this.MLFQ_2.setText(String.valueOf(IObound));
         this.MLFQ_3.setText(String.valueOf(CPUbound));
         this.MLFQ_5.setText(String.valueOf(ciclos));
-        this.MLFQ_4.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.MLFQ_4.setText(String.format("%.2f", throughtput)+" ciclos/proceso");
         this.MLFQ_6.setText(String.valueOf(cpu)+"%");
     }
     
@@ -215,7 +215,7 @@ import Graficos.*;
         this.SPN_2.setText(String.valueOf(IObound));
         this.SPN_3.setText(String.valueOf(CPUbound));
         this.SPN_5.setText(String.valueOf(ciclos));
-        this.SPN_4.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.SPN_4.setText(String.format("%.2f", throughtput)+" ciclos/proceso");
         this.SPN_6.setText(String.valueOf(cpu)+"%");
     }
     
@@ -224,7 +224,7 @@ import Graficos.*;
         this.SRT_2.setText(String.valueOf(IObound));
         this.SRT_3.setText(String.valueOf(CPUbound));
         this.SRT_5.setText(String.valueOf(ciclos));
-        this.SRT_4.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.SRT_4.setText(String.format("%.2f", throughtput)+" ciclos/proceso");
         this.SRT_6.setText(String.valueOf(cpu)+"%");
     }
     
@@ -233,7 +233,7 @@ import Graficos.*;
         this.RR_2.setText(String.valueOf(IObound));
         this.RR_3.setText(String.valueOf(CPUbound));
         this.RR_5.setText(String.valueOf(ciclos));
-        this.RR_4.setText(String.format("%.2f", throughtput)+" procesos/ciclos");
+        this.RR_4.setText(String.format("%.2f", throughtput)+" ciclos/proceso");
         this.RR_6.setText(String.valueOf(cpu)+"%");
     }
     
@@ -428,12 +428,6 @@ import Graficos.*;
         DurCicloRelojAct = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         CambiarCicloReloj = new javax.swing.JButton();
-        jPanel9 = new javax.swing.JPanel();
-        jLabel73 = new javax.swing.JLabel();
-        BuscarConfig = new javax.swing.JButton();
-        CrearConfig = new javax.swing.JButton();
-        jLabel74 = new javax.swing.JLabel();
-        jLabel75 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -1055,7 +1049,7 @@ import Graficos.*;
         FSFC_3.setText("0");
 
         FSFC_4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        FSFC_4.setText("0.0 Procesos/Ciclos");
+        FSFC_4.setText("0.0 ciclos/procesos");
 
         FSFC_5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         FSFC_5.setText("0");
@@ -1073,7 +1067,7 @@ import Graficos.*;
         SRT_3.setText("0");
 
         SRT_4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        SRT_4.setText("0.0 Procesos/Ciclos");
+        SRT_4.setText("0.0 ciclos/procesos");
 
         SRT_5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         SRT_5.setText("0");
@@ -1091,7 +1085,7 @@ import Graficos.*;
         RR_3.setText("0");
 
         RR_4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        RR_4.setText("0.0 Procesos/Ciclos");
+        RR_4.setText("0.0 ciclos/procesos");
 
         RR_5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         RR_5.setText("0");
@@ -1109,7 +1103,7 @@ import Graficos.*;
         HRRN_3.setText("0");
 
         HRRN_4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        HRRN_4.setText("0.0 Procesos/Ciclos");
+        HRRN_4.setText("0.0 ciclos/procesos");
 
         HRRN_5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         HRRN_5.setText("0");
@@ -1127,7 +1121,7 @@ import Graficos.*;
         SPN_3.setText("0");
 
         SPN_4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        SPN_4.setText("0.0 Procesos/Ciclos");
+        SPN_4.setText("0.0 ciclos/procesos");
 
         SPN_5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         SPN_5.setText("0");
@@ -1145,7 +1139,7 @@ import Graficos.*;
         MLFQ_3.setText("0");
 
         MLFQ_4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        MLFQ_4.setText("0.0 Procesos/Ciclos");
+        MLFQ_4.setText("0.0 ciclos/procesos");
 
         MLFQ_5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         MLFQ_5.setText("0");
@@ -1580,66 +1574,6 @@ import Graficos.*;
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
-        jPanel9.setBackground(new java.awt.Color(204, 204, 255));
-        jPanel9.setForeground(new java.awt.Color(255, 255, 255));
-
-        BuscarConfig.setText("Buscar Configuración");
-        BuscarConfig.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BuscarConfigActionPerformed(evt);
-            }
-        });
-
-        CrearConfig.setText("Guardar Configuración");
-        CrearConfig.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CrearConfigActionPerformed(evt);
-            }
-        });
-
-        jLabel74.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel74.setText("Configuracion Con archivo JSON");
-
-        jLabel75.setText("Guarda o carga la politica y la duración de ciclo de reloj");
-
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGap(162, 162, 162)
-                        .addComponent(jLabel73))
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel74)
-                            .addGroup(jPanel9Layout.createSequentialGroup()
-                                .addComponent(BuscarConfig)
-                                .addGap(66, 66, 66)
-                                .addComponent(CrearConfig))))
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGap(95, 95, 95)
-                        .addComponent(jLabel75)))
-                .addContainerGap(37, Short.MAX_VALUE))
-        );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addComponent(jLabel74)
-                .addGap(26, 26, 26)
-                .addComponent(jLabel75)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel73)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BuscarConfig)
-                    .addComponent(CrearConfig))
-                .addGap(49, 49, 49))
-        );
-
         javax.swing.GroupLayout ConfiguracionLayout = new javax.swing.GroupLayout(Configuracion);
         Configuracion.setLayout(ConfiguracionLayout);
         ConfiguracionLayout.setHorizontalGroup(
@@ -1647,12 +1581,9 @@ import Graficos.*;
             .addGroup(ConfiguracionLayout.createSequentialGroup()
                 .addGap(45, 45, 45)
                 .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(ConfiguracionLayout.createSequentialGroup()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(87, 87, 87)
-                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(862, Short.MAX_VALUE))
+                .addContainerGap(1215, Short.MAX_VALUE))
         );
         ConfiguracionLayout.setVerticalGroup(
             ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1660,10 +1591,8 @@ import Graficos.*;
                 .addGap(36, 36, 36)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(431, Short.MAX_VALUE))
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(454, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Configuración", Configuracion);
@@ -2022,13 +1951,11 @@ import Graficos.*;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BuscarConfig;
     private javax.swing.JButton CambiarCicloReloj;
     private javax.swing.JButton CambiarPolitica;
     private javax.swing.JTextArea CicloActual;
     private javax.swing.JLabel Ciclos;
     private javax.swing.JPanel Configuracion;
-    private javax.swing.JButton CrearConfig;
     private javax.swing.JButton CrearP;
     private javax.swing.JButton CrearPAuto;
     private javax.swing.JSpinner DurCicloReloj;
@@ -2162,9 +2089,6 @@ import Graficos.*;
     private javax.swing.JLabel jLabel70;
     private javax.swing.JLabel jLabel71;
     private javax.swing.JLabel jLabel72;
-    private javax.swing.JLabel jLabel73;
-    private javax.swing.JLabel jLabel74;
-    private javax.swing.JLabel jLabel75;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -2175,7 +2099,6 @@ import Graficos.*;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane17;
     private javax.swing.JScrollPane jScrollPane18;
