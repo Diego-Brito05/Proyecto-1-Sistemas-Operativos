@@ -428,6 +428,12 @@ import Graficos.*;
         DurCicloRelojAct = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         CambiarCicloReloj = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel73 = new javax.swing.JLabel();
+        BuscarConfig = new javax.swing.JButton();
+        CrearConfig = new javax.swing.JButton();
+        jLabel74 = new javax.swing.JLabel();
+        jLabel75 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -1574,6 +1580,66 @@ import Graficos.*;
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
+        jPanel9.setBackground(new java.awt.Color(204, 204, 255));
+        jPanel9.setForeground(new java.awt.Color(255, 255, 255));
+
+        BuscarConfig.setText("Buscar Configuración");
+        BuscarConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuscarConfigActionPerformed(evt);
+            }
+        });
+
+        CrearConfig.setText("Guardar Configuración");
+        CrearConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CrearConfigActionPerformed(evt);
+            }
+        });
+
+        jLabel74.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel74.setText("Configuracion Con archivo JSON");
+
+        jLabel75.setText("Guarda o carga la politica y la duración de ciclo de reloj");
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(162, 162, 162)
+                        .addComponent(jLabel73))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(55, 55, 55)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel74)
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addComponent(BuscarConfig)
+                                .addGap(66, 66, 66)
+                                .addComponent(CrearConfig))))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(95, 95, 95)
+                        .addComponent(jLabel75)))
+                .addContainerGap(37, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGap(54, 54, 54)
+                .addComponent(jLabel74)
+                .addGap(26, 26, 26)
+                .addComponent(jLabel75)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel73)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BuscarConfig)
+                    .addComponent(CrearConfig))
+                .addGap(49, 49, 49))
+        );
+
         javax.swing.GroupLayout ConfiguracionLayout = new javax.swing.GroupLayout(Configuracion);
         Configuracion.setLayout(ConfiguracionLayout);
         ConfiguracionLayout.setHorizontalGroup(
@@ -1581,9 +1647,12 @@ import Graficos.*;
             .addGroup(ConfiguracionLayout.createSequentialGroup()
                 .addGap(45, 45, 45)
                 .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(ConfiguracionLayout.createSequentialGroup()
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(87, 87, 87)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(1215, Short.MAX_VALUE))
+                .addContainerGap(865, Short.MAX_VALUE))
         );
         ConfiguracionLayout.setVerticalGroup(
             ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1591,7 +1660,9 @@ import Graficos.*;
                 .addGap(36, 36, 36)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(454, Short.MAX_VALUE))
         );
 
@@ -1821,45 +1892,44 @@ import Graficos.*;
     }//GEN-LAST:event_IndicadorActivoActionPerformed
 
     private void CambiarCicloRelojActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CambiarCicloRelojActionPerformed
-      try {
-        Object spinnerValue = DurCicloReloj.getValue();
-        Double duracionEnSegundos = (Double) spinnerValue;
+        try {
+            Object spinnerValue = DurCicloReloj.getValue();
+            Double duracionEnSegundos = (Double) spinnerValue;
 
-        long duracionEnMilisegundos = (long) (duracionEnSegundos * 1000.0);
+            long duracionEnMilisegundos = (long) (duracionEnSegundos * 1000.0);
 
-        if (duracionEnMilisegundos < 0) {
-            JOptionPane.showMessageDialog(this, "La duración del ciclo no puede ser negativa.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
-            return;
+            if (duracionEnMilisegundos < 0) {
+                JOptionPane.showMessageDialog(this, "La duración del ciclo no puede ser negativa.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 1. Comunicar el cambio al simulador (esto no cambia)
+            if (miSimulador != null) {
+                miSimulador.setDuracionCiclo(duracionEnMilisegundos);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error: El simulador no está inicializado.", "Error Interno", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 2. Actualizar el display INMEDIATAMENTE después de cambiar el valor.
+            // Ahora esta es la única vez que se actualiza el display de duración.
+            actualizarDisplayDuracionCiclo();
+
+            // 3. Mostrar un mensaje de confirmación (esto no cambia)
+            JOptionPane.showMessageDialog(this, "La duración del ciclo se ha actualizado a " + duracionEnSegundos + " segundos.", "Cambio Guardado", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (ClassCastException ex) {
+            JOptionPane.showMessageDialog(this, "Hubo un error al leer el valor de duración.", "Error de Tipo", JOptionPane.ERROR_MESSAGE);
         }
-
-        // 1. Comunicar el cambio al simulador (esto no cambia)
-        if (miSimulador != null) {
-            miSimulador.setDuracionCiclo(duracionEnMilisegundos);
-        } else {
-            JOptionPane.showMessageDialog(this, "Error: El simulador no está inicializado.", "Error Interno", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        // 2. Actualizar el display INMEDIATAMENTE después de cambiar el valor.
-        // Ahora esta es la única vez que se actualiza el display de duración.
-        actualizarDisplayDuracionCiclo();
-
-        // 3. Mostrar un mensaje de confirmación (esto no cambia)
-        JOptionPane.showMessageDialog(this, "La duración del ciclo se ha actualizado a " + duracionEnSegundos + " segundos.", "Cambio Guardado", JOptionPane.INFORMATION_MESSAGE);
-
-    } catch (ClassCastException ex) {
-        JOptionPane.showMessageDialog(this, "Hubo un error al leer el valor de duración.", "Error de Tipo", JOptionPane.ERROR_MESSAGE);
-    }
-
     }//GEN-LAST:event_CambiarCicloRelojActionPerformed
 
     private void BuscarConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarConfigActionPerformed
-        
+
         ManejadorJSON manejador = new ManejadorJSON();
         ConfiguracionData config = manejador.cargarConfiguracionInteractivo();
 
         if (config != null) {
-            // Obtener los datos cargados 
+            // Obtener los datos cargados
             String politicaCargada = config.getPolitica();
             double duracionCicloCargada = config.getDuracionCiclo();
 
@@ -1867,7 +1937,7 @@ import Graficos.*;
             PoliticaPlanificacion.setSelectedItem(politicaCargada);
             DurCicloReloj.setValue(duracionCicloCargada);
 
-            //  Aplicar la configuración a la lógica del simulador 
+            //  Aplicar la configuración a la lógica del simulador
             long duracionEnMilisegundos = (long) (duracionCicloCargada * 1000.0);
             miSimulador.setDuracionCiclo(duracionEnMilisegundos);
 
@@ -1885,44 +1955,40 @@ import Graficos.*;
                 miSimulador.setPlanificador(nuevoPlanificador);
             }
 
-          
             //  Formatear el valor double a un String con dos decimales.
-          
+
             String textoDuracion = String.format("%.2f", duracionCicloCargada);
-            
+
             //  Establecer el texto formateado directamente en el JLabel.
-            
+
             DurCicloRelojAct.setText(textoDuracion);
 
-           
             JOptionPane.showMessageDialog(this, "Configuración cargada y aplicada exitosamente.", "Carga Exitosa", JOptionPane.INFORMATION_MESSAGE);
 
         } else {
             System.out.println("Carga de configuración cancelada o fallida.");
         }
 
-    
     }//GEN-LAST:event_BuscarConfigActionPerformed
 
     private void CrearConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearConfigActionPerformed
-        
-         ManejadorJSON manejador = new ManejadorJSON();
-    
-    String politicaActual = (String) PoliticaPlanificacion.getSelectedItem();
-    double duracionActual = (Double) DurCicloReloj.getValue();
-    
-    // Llamamos al método para guardar, que ahora devuelve el nombre del archivo
-    String nombreArchivo = manejador.guardarConfiguracion(politicaActual, duracionActual);
-    
-    if (nombreArchivo != null) {
-        JOptionPane.showMessageDialog(this, 
-            "Configuración guardada exitosamente en el archivo:\n" + nombreArchivo, 
-            "Guardado Exitoso", 
-            JOptionPane.INFORMATION_MESSAGE);
-    } else {
-        JOptionPane.showMessageDialog(this, "No se pudo guardar la configuración.", "Error al Guardar", JOptionPane.ERROR_MESSAGE);
-    }
 
+        ManejadorJSON manejador = new ManejadorJSON();
+
+        String politicaActual = (String) PoliticaPlanificacion.getSelectedItem();
+        double duracionActual = (Double) DurCicloReloj.getValue();
+
+        // Llamamos al método para guardar, que ahora devuelve el nombre del archivo
+        String nombreArchivo = manejador.guardarConfiguracion(politicaActual, duracionActual);
+
+        if (nombreArchivo != null) {
+            JOptionPane.showMessageDialog(this,
+                "Configuración guardada exitosamente en el archivo:\n" + nombreArchivo,
+                "Guardado Exitoso",
+                JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo guardar la configuración.", "Error al Guardar", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_CrearConfigActionPerformed
 
     /**
@@ -1951,11 +2017,13 @@ import Graficos.*;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BuscarConfig;
     private javax.swing.JButton CambiarCicloReloj;
     private javax.swing.JButton CambiarPolitica;
     private javax.swing.JTextArea CicloActual;
     private javax.swing.JLabel Ciclos;
     private javax.swing.JPanel Configuracion;
+    private javax.swing.JButton CrearConfig;
     private javax.swing.JButton CrearP;
     private javax.swing.JButton CrearPAuto;
     private javax.swing.JSpinner DurCicloReloj;
@@ -2089,6 +2157,9 @@ import Graficos.*;
     private javax.swing.JLabel jLabel70;
     private javax.swing.JLabel jLabel71;
     private javax.swing.JLabel jLabel72;
+    private javax.swing.JLabel jLabel73;
+    private javax.swing.JLabel jLabel74;
+    private javax.swing.JLabel jLabel75;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -2099,6 +2170,7 @@ import Graficos.*;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane17;
     private javax.swing.JScrollPane jScrollPane18;
