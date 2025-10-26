@@ -4,6 +4,8 @@
  */
 package Interfaces;
 
+import Auxiliar.ConfiguracionData;
+import Auxiliar.ManejadorJSON;
 import EstructuraDeDatos.Cola;
 import EstructuraDeDatos.Proceso;
 import Planificador.EstrategiaPlanificacion;
@@ -287,16 +289,6 @@ import Simulador.Estadisticas;
         jScrollPane1 = new javax.swing.JScrollPane();
         enEjec = new javax.swing.JTextArea();
         jLabel72 = new javax.swing.JLabel();
-        Configuracion = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        DurCicloReloj = new javax.swing.JSpinner();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        DurCicloRelojAct = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        CambiarCicloReloj = new javax.swing.JButton();
         Graficos = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -394,6 +386,22 @@ import Simulador.Estadisticas;
         MLFQ_4 = new javax.swing.JLabel();
         MLFQ_5 = new javax.swing.JLabel();
         MLFQ_6 = new javax.swing.JLabel();
+        Configuracion = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        DurCicloReloj = new javax.swing.JSpinner();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        DurCicloRelojAct = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        CambiarCicloReloj = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel73 = new javax.swing.JLabel();
+        BuscarConfig = new javax.swing.JButton();
+        CrearConfig = new javax.swing.JButton();
+        jLabel74 = new javax.swing.JLabel();
+        jLabel75 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -593,7 +601,7 @@ import Simulador.Estadisticas;
                     .addComponent(jLabel44, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(PoliticaPlanificacion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(CambiarPolitica, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(347, Short.MAX_VALUE))
+                .addContainerGap(533, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -768,126 +776,13 @@ import Simulador.Estadisticas;
 
         jTabbedPane2.addTab("Simulador", Simulador);
 
-        Configuracion.setBackground(new java.awt.Color(153, 153, 255));
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setText("Configuración");
-
-        jPanel5.setBackground(new java.awt.Color(204, 204, 255));
-
-        DurCicloReloj.setModel(new javax.swing.SpinnerNumberModel(0.25d, 0.0d, null, 0.25d));
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Duración Actual del Ciclo de reloj");
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel3.setText("Segundos");
-
-        DurCicloRelojAct.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        DurCicloRelojAct.setText("0,25");
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(87, 87, 87)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(DurCicloRelojAct))))
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                .addComponent(DurCicloRelojAct)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addGap(35, 35, 35))
-        );
-
-        jLabel4.setText("Cambiar duración de ciclos de reloj");
-
-        CambiarCicloReloj.setText("Guardar Cambios");
-        CambiarCicloReloj.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CambiarCicloRelojActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(DurCicloReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addComponent(CambiarCicloReloj)
-                        .addGap(44, 44, 44)))
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addComponent(DurCicloReloj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(CambiarCicloReloj)))
-                .addContainerGap(40, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout ConfiguracionLayout = new javax.swing.GroupLayout(Configuracion);
-        Configuracion.setLayout(ConfiguracionLayout);
-        ConfiguracionLayout.setHorizontalGroup(
-            ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ConfiguracionLayout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(1215, Short.MAX_VALUE))
-        );
-        ConfiguracionLayout.setVerticalGroup(
-            ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ConfiguracionLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(431, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("Configuración", Configuracion);
-
         Graficos.setBackground(new java.awt.Color(204, 255, 204));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1756, Short.MAX_VALUE)
+            .addGap(0, 1948, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -900,7 +795,7 @@ import Simulador.Estadisticas;
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1756, Short.MAX_VALUE)
+            .addGap(0, 1948, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -913,7 +808,7 @@ import Simulador.Estadisticas;
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1756, Short.MAX_VALUE)
+            .addGap(0, 1948, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -982,7 +877,7 @@ import Simulador.Estadisticas;
                                 .addComponent(jLabel6)
                                 .addGap(18, 18, 18)
                                 .addComponent(ProcesosTerminados, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 512, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 609, Short.MAX_VALUE)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -997,7 +892,7 @@ import Simulador.Estadisticas;
                                 .addComponent(jLabel10)
                                 .addGap(18, 18, 18)
                                 .addComponent(Throughtput, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(612, Short.MAX_VALUE))
+                        .addContainerGap(708, Short.MAX_VALUE))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -1273,13 +1168,12 @@ import Simulador.Estadisticas;
                                 .addComponent(jLabel18)
                                 .addGap(18, 18, 18)
                                 .addComponent(FSFC_4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(EstadísticasLayout.createSequentialGroup()
-                                    .addComponent(jLabel22)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(FSFC_5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EstadísticasLayout.createSequentialGroup()
+                                .addComponent(jLabel22)
+                                .addGap(18, 18, 18)
+                                .addComponent(FSFC_5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 442, Short.MAX_VALUE)
                         .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1377,15 +1271,14 @@ import Simulador.Estadisticas;
                             .addComponent(jLabel70)
                             .addGap(18, 18, 18)
                             .addComponent(SPN_6, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(EstadísticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, EstadísticasLayout.createSequentialGroup()
-                                .addComponent(jLabel54)
-                                .addGap(18, 18, 18)
-                                .addComponent(MLFQ_3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, EstadísticasLayout.createSequentialGroup()
-                                .addComponent(jLabel53)
-                                .addGap(18, 18, 18)
-                                .addComponent(MLFQ_2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(EstadísticasLayout.createSequentialGroup()
+                            .addComponent(jLabel54)
+                            .addGap(18, 18, 18)
+                            .addComponent(MLFQ_3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(EstadísticasLayout.createSequentialGroup()
+                            .addComponent(jLabel53)
+                            .addGap(18, 18, 18)
+                            .addComponent(MLFQ_2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(EstadísticasLayout.createSequentialGroup()
                             .addComponent(jLabel69)
                             .addGap(18, 18, 18)
@@ -1564,6 +1457,184 @@ import Simulador.Estadisticas;
         );
 
         jTabbedPane2.addTab("Estadísticas", Estadísticas);
+
+        Configuracion.setBackground(new java.awt.Color(153, 153, 255));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setText("Configuración");
+
+        jPanel5.setBackground(new java.awt.Color(204, 204, 255));
+
+        DurCicloReloj.setModel(new javax.swing.SpinnerNumberModel(0.25d, 0.0d, null, 0.25d));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setText("Duración Actual del Ciclo de reloj");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setText("Segundos");
+
+        DurCicloRelojAct.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        DurCicloRelojAct.setText("0,25");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(87, 87, 87)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(DurCicloRelojAct))))
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(DurCicloRelojAct)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addGap(35, 35, 35))
+        );
+
+        jLabel4.setText("Cambiar duración de ciclos de reloj");
+
+        CambiarCicloReloj.setText("Guardar Cambios");
+        CambiarCicloReloj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CambiarCicloRelojActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(DurCicloReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addComponent(CambiarCicloReloj)
+                        .addGap(44, 44, 44)))
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(54, 54, 54)
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(DurCicloReloj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(CambiarCicloReloj)))
+                .addContainerGap(40, Short.MAX_VALUE))
+        );
+
+        jPanel9.setBackground(new java.awt.Color(204, 204, 255));
+        jPanel9.setForeground(new java.awt.Color(255, 255, 255));
+
+        BuscarConfig.setText("Buscar Configuración");
+        BuscarConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuscarConfigActionPerformed(evt);
+            }
+        });
+
+        CrearConfig.setText("Guardar Configuración");
+        CrearConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CrearConfigActionPerformed(evt);
+            }
+        });
+
+        jLabel74.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel74.setText("Configuracion Con archivo JSON");
+
+        jLabel75.setText("Guarda o carga la politica y la duración de ciclo de reloj");
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(162, 162, 162)
+                        .addComponent(jLabel73))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(55, 55, 55)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel74)
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addComponent(BuscarConfig)
+                                .addGap(66, 66, 66)
+                                .addComponent(CrearConfig))))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(95, 95, 95)
+                        .addComponent(jLabel75)))
+                .addContainerGap(37, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGap(54, 54, 54)
+                .addComponent(jLabel74)
+                .addGap(26, 26, 26)
+                .addComponent(jLabel75)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel73)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BuscarConfig)
+                    .addComponent(CrearConfig))
+                .addGap(49, 49, 49))
+        );
+
+        javax.swing.GroupLayout ConfiguracionLayout = new javax.swing.GroupLayout(Configuracion);
+        Configuracion.setLayout(ConfiguracionLayout);
+        ConfiguracionLayout.setHorizontalGroup(
+            ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfiguracionLayout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(ConfiguracionLayout.createSequentialGroup()
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(87, 87, 87)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(862, Short.MAX_VALUE))
+        );
+        ConfiguracionLayout.setVerticalGroup(
+            ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfiguracionLayout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(431, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Configuración", Configuracion);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1821,6 +1892,78 @@ import Simulador.Estadisticas;
 
     }//GEN-LAST:event_CambiarCicloRelojActionPerformed
 
+    private void BuscarConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarConfigActionPerformed
+        
+        ManejadorJSON manejador = new ManejadorJSON();
+        ConfiguracionData config = manejador.cargarConfiguracionInteractivo();
+
+        if (config != null) {
+            // Obtener los datos cargados 
+            String politicaCargada = config.getPolitica();
+            double duracionCicloCargada = config.getDuracionCiclo();
+
+            // Aplicar la configuración a los controles de entrada
+            PoliticaPlanificacion.setSelectedItem(politicaCargada);
+            DurCicloReloj.setValue(duracionCicloCargada);
+
+            //  Aplicar la configuración a la lógica del simulador 
+            long duracionEnMilisegundos = (long) (duracionCicloCargada * 1000.0);
+            miSimulador.setDuracionCiclo(duracionEnMilisegundos);
+
+            EstrategiaPlanificacion nuevoPlanificador = null;
+            switch (politicaCargada) {
+                case "FCFS": nuevoPlanificador = new FCFS(); break;
+                case "HRRN": nuevoPlanificador = new HRRN(); break;
+                case "MLFQ": nuevoPlanificador = new MLFQ(); break;
+                case "RoundRobin": nuevoPlanificador = new RoundRobin(); break;
+                case "SPN": nuevoPlanificador = new SPN(); break;
+                case "SRT": nuevoPlanificador = new SRT(); break;
+            }
+
+            if (nuevoPlanificador != null) {
+                miSimulador.setPlanificador(nuevoPlanificador);
+            }
+
+          
+            //  Formatear el valor double a un String con dos decimales.
+          
+            String textoDuracion = String.format("%.2f", duracionCicloCargada);
+            
+            //  Establecer el texto formateado directamente en el JLabel.
+            
+            DurCicloRelojAct.setText(textoDuracion);
+
+           
+            JOptionPane.showMessageDialog(this, "Configuración cargada y aplicada exitosamente.", "Carga Exitosa", JOptionPane.INFORMATION_MESSAGE);
+
+        } else {
+            System.out.println("Carga de configuración cancelada o fallida.");
+        }
+
+    
+    }//GEN-LAST:event_BuscarConfigActionPerformed
+
+    private void CrearConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearConfigActionPerformed
+        
+         ManejadorJSON manejador = new ManejadorJSON();
+    
+    String politicaActual = (String) PoliticaPlanificacion.getSelectedItem();
+    double duracionActual = (Double) DurCicloReloj.getValue();
+    
+    // Llamamos al método para guardar, que ahora devuelve el nombre del archivo
+    String nombreArchivo = manejador.guardarConfiguracion(politicaActual, duracionActual);
+    
+    if (nombreArchivo != null) {
+        JOptionPane.showMessageDialog(this, 
+            "Configuración guardada exitosamente en el archivo:\n" + nombreArchivo, 
+            "Guardado Exitoso", 
+            JOptionPane.INFORMATION_MESSAGE);
+    } else {
+        JOptionPane.showMessageDialog(this, "No se pudo guardar la configuración.", "Error al Guardar", JOptionPane.ERROR_MESSAGE);
+    }
+
+    }//GEN-LAST:event_CrearConfigActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1847,11 +1990,13 @@ import Simulador.Estadisticas;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BuscarConfig;
     private javax.swing.JButton CambiarCicloReloj;
     private javax.swing.JButton CambiarPolitica;
     private javax.swing.JTextArea CicloActual;
     private javax.swing.JLabel Ciclos;
     private javax.swing.JPanel Configuracion;
+    private javax.swing.JButton CrearConfig;
     private javax.swing.JButton CrearP;
     private javax.swing.JButton CrearPAuto;
     private javax.swing.JSpinner DurCicloReloj;
@@ -1985,6 +2130,9 @@ import Simulador.Estadisticas;
     private javax.swing.JLabel jLabel70;
     private javax.swing.JLabel jLabel71;
     private javax.swing.JLabel jLabel72;
+    private javax.swing.JLabel jLabel73;
+    private javax.swing.JLabel jLabel74;
+    private javax.swing.JLabel jLabel75;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -1995,6 +2143,7 @@ import Simulador.Estadisticas;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane17;
     private javax.swing.JScrollPane jScrollPane18;
